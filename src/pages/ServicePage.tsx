@@ -20,6 +20,7 @@ import { Country, Service, City } from '@/types';
 const ServicePage = () => {
   const { country: countrySlug, city: citySlug, service: serviceSlug } = useParams();
   const { language, t } = useLanguage();
+  // ... ( باقي الـ state hooks كما هي )
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
   const [currentService, setCurrentService] = useState<Service | null>(null);
   const [currentCity, setCurrentCity] = useState<City | null>(null);
@@ -27,7 +28,9 @@ const ServicePage = () => {
   const [loading, setLoading] = useState(true);
   const [showUrgentForm, setShowUrgentForm] = useState(false);
 
+
   useEffect(() => {
+    // ... (منطق جلب البيانات يبقى كما هو)
     async function loadData() {
       setLoading(true);
       try {
@@ -66,9 +69,7 @@ const ServicePage = () => {
   if (loading) {
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-white text-xl">{t('loading')}</div>
-        </div>
+        <div className="min-h-screen flex items-center justify-center"><div className="text-white text-xl">{t('loading')}</div></div>
       </Layout>
     );
   }
@@ -80,7 +81,6 @@ const ServicePage = () => {
           <div>
             <h1 className="text-3xl font-bold text-white mb-4">{t('service.notFound')}</h1>
             <p className="text-blue-200">{t('service.notAvailable')}</p>
-            <p className="text-blue-200">{t('service.checkURL')}</p>
           </div>
         </div>
       </Layout>
@@ -89,13 +89,9 @@ const ServicePage = () => {
 
   const seoData = generateServicePageSEO(currentService, currentCity, currentCountry, language);
 
-  const cityTestimonials = testimonials.filter(
-    t => t.serviceId === currentService.id && (t.city === currentCity.name || t.city === currentCity.slug)
-  );
+  const cityTestimonials = testimonials.filter(t => t.serviceId === currentService.id && (t.city === currentCity.name || t.city === currentCity.slug));
 
-  const averageRating = cityTestimonials.length > 0
-    ? cityTestimonials.reduce((sum, t) => sum + t.rating, 0) / cityTestimonials.length
-    : 4.8;
+  const averageRating = cityTestimonials.length > 0 ? cityTestimonials.reduce((sum, t) => sum + t.rating, 0) / cityTestimonials.length : 4.8;
 
   const handleUrgentRequest = () => {
     setShowUrgentForm(true);
@@ -106,7 +102,8 @@ const ServicePage = () => {
     <Layout>
       <SEOHead seoData={seoData} language={language} />
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 space-y-12">
+        
         {currentService.isEmergency && (
           <UrgentServiceIndicator
             onUrgentRequest={handleUrgentRequest}
@@ -114,64 +111,19 @@ const ServicePage = () => {
             isAvailable={true}
           />
         )}
-      </div>
 
-      {/* --- FIX: Restructured the main grid to be responsive --- */}
-      <main className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
-          
-          {/* Main Content Column */}
-          <div className="lg:col-span-2 space-y-8">
-            <ServiceBreadcrumb
-              country={currentCountry}
-              city={currentCity}
-              language={language}
-            />
-            <ServiceHero
-              service={currentService}
-              city={currentCity}
-              language={language}
-              averageRating={averageRating}
-              reviewCount={cityTestimonials.length}
-            />
-            <ServiceContactButtons city={currentCity} />
-            <ServiceFeatures />
-          </div>
+        {/* --- FIX: Simplified to a single column layout with spacing for better mobile experience --- */}
+        <main className="space-y-8">
+          <ServiceBreadcrumb country={currentCountry} city={currentCity} language={language} />
+          <ServiceHero service={currentService} city={currentCity} language={language} averageRating={averageRating} reviewCount={cityTestimonials.length} />
+          <ServiceContactButtons city={currentCity} />
+          <AvailabilityStatus serviceId={currentService.id} cityId={currentCity.slug} />
+          <ServiceFeatures />
+        </main>
 
-          {/* Sidebar Column */}
-          <aside className="lg:sticky lg:top-24">
-            <AvailabilityStatus
-              serviceId={currentService.id}
-              cityId={currentCity.slug}
-            />
-          </aside>
-        </div>
-      </main>
-
-      <div className="mt-12">
-        <ServiceFormSection
-          service={currentService}
-          city={currentCity}
-          country={currentCountry}
-          isUrgent={showUrgentForm}
-        />
-      </div>
-
-      <div className="mt-12">
-        <Testimonials
-          testimonials={cityTestimonials}
-          serviceId={currentService.id}
-          cityId={currentCity.slug}
-        />
-      </div>
-
-      <div className="mt-12">
-        <RelatedServices
-          services={relatedServices}
-          city={currentCity}
-          country={countrySlug || ''}
-          language={language}
-        />
+        <ServiceFormSection service={currentService} city={currentCity} country={currentCountry} isUrgent={showUrgentForm} />
+        <Testimonials testimonials={cityTestimonials} serviceId={currentService.id} cityId={currentCity.slug} />
+        <RelatedServices services={relatedServices} city={currentCity} country={countrySlug || ''} language={language} />
       </div>
     </Layout>
   );
