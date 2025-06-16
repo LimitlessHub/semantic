@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import LandingPage from '@/components/LandingPage';
@@ -19,16 +18,14 @@ const Index = () => {
   useEffect(() => {
     async function loadData() {
       try {
-        console.log('Loading countries and services...');
         const [countriesData, servicesData] = await Promise.all([
           getCountries(),
           getServices()
         ]);
         
-        console.log('Countries loaded:', countriesData.length);
-        console.log('Services loaded:', servicesData.length);
+        // --- FIX: Removed the .filter(c => c.isActive) to ensure all countries are always displayed ---
+        setCountries(countriesData);
         
-        setCountries(countriesData.filter(c => c.isActive));
         setServices(servicesData.filter(s => s.isActive).slice(0, 6));
       } catch (error) {
         console.error('Error loading data:', error);
