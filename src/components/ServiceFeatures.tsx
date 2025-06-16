@@ -11,15 +11,17 @@ export default function ServiceFeatures() {
     t('service.features.pricing'),
   ];
 
+  // FIX: Using inline style for text-align to guarantee RTL works
+  const textAlignStyle = { textAlign: language === 'ar' ? 'right' : 'left' } as const;
+
   return (
     <div className="mt-8">
-      <h3 className={`text-2xl font-bold text-white mb-6 ${language === 'ar' ? 'text-right' : 'text-left'}`}>{t('service.bestChoice')}</h3>
+      <h3 className="text-2xl font-bold text-white mb-6" style={textAlignStyle}>{t('service.bestChoice')}</h3>
       <div className="space-y-4">
         {features.map((feature, index) => (
-          // FIX: Forcing RTL direction using flex-row-reverse for Arabic
           <div key={index} className={`flex items-start gap-x-3 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
             <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-1" />
-            <span className={`text-white leading-relaxed ${language === 'ar' ? 'text-right' : 'text-left'}`}>{feature}</span>
+            <span className="text-white leading-relaxed" style={textAlignStyle}>{feature}</span>
           </div>
         ))}
       </div>
