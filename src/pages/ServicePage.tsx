@@ -72,30 +72,32 @@ const ServicePage = () => {
     <Layout>
       <SEOHead seoData={seoData} language={language} />
       
-      <div className="container mx-auto px-4 pt-8">
-        <ServiceHero service={currentService} city={currentCity} country={currentCountry} language={language} averageRating={averageRating} reviewCount={reviewCount} serviceImage={serviceImage}/>
-      </div>
+      {currentService.isEmergency && ( <div className="container mx-auto px-4 pt-8"><UrgentServiceIndicator onUrgentRequest={() => {}} serviceType={language === 'ar' ? currentService.nameAr : currentService.name} isAvailable={true} /></div> )}
+      
+      <div className="container mx-auto px-4 pt-8"><ServiceHero service={currentService} city={currentCity} country={currentCountry} language={language} averageRating={averageRating} reviewCount={reviewCount} serviceImage={serviceImage}/></div>
 
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
           <main className="lg:col-span-2">
-            <Tabs defaultValue={language === 'ar' ? 'coverage' : 'overview'} className="w-full">
+            <Tabs defaultValue="overview" className="w-full">
               <TabsList className="flex w-full border-b border-white/20 rounded-none bg-transparent p-0">
                 {pageTabs.map(tab => (<TabsTrigger key={tab.value} value={tab.value} className="flex-1 data-[state=active]:border-blue-400">{tab.label}</TabsTrigger>))}
               </TabsList>
               
               <div className="mt-6">
-                {/* FIX: Applying dir attribute to force RTL on each tab's content */}
                 <TabsContent value="overview" dir={language === 'ar' ? 'rtl' : 'ltr'}>
                   <h2 className="text-2xl font-bold text-white mb-4 text-start">وصف الخدمة</h2>
                   <p className="text-blue-100 whitespace-pre-line leading-relaxed text-start">{(currentService as any).fullDescriptionAr}</p>
-                  <ServiceFeatures />
                 </TabsContent>
                 <TabsContent value="faq" dir={language === 'ar' ? 'rtl' : 'ltr'}><ServiceFAQ serviceId={currentService.slug} /></TabsContent>
                 <TabsContent value="coverage" dir={language === 'ar' ? 'rtl' : 'ltr'}><ServiceCoverage cityId={currentCity.id} /></TabsContent>
               </div>
             </Tabs>
+            
+            {/* FIX: Moved ServiceFeatures outside and below the Tabs component */}
+            <div className="mt-12"><ServiceFeatures /></div>
           </main>
+          
           <aside className="lg:sticky lg:top-24 space-y-8" id="service-form">
             <AvailabilityStatus serviceId={currentService.id} cityId={currentCity.slug} />
             <ServiceFormSection service={currentService} city={currentCity} country={currentCountry} />
@@ -105,15 +107,9 @@ const ServicePage = () => {
       
       <div className="py-12 bg-blue-900/30"><Testimonials testimonials={testimonials.filter(t => t.serviceId === currentService.slug)} /></div>
       
-      {/* FIX: Added a diagnostic message for when RelatedServices is empty */}
-      <section className="py-12">
-        <h2 className="text-3xl font-bold text-white text-center mb-8">{t('service.related')}</h2>
-        {relatedServices.length > 0 ? (
-          <RelatedServices services={relatedServices} city={currentCity} country={countrySlug || ''} language={language} />
-        ) : (
-          <p className="text-center text-blue-200">(ملاحظة للمطور: لم يتم العثور على خدمات أخرى في نفس الفئة لعرضها هنا)</p>
-        )}
-      </section>
+      {relatedServices.length > 0 && (
+        <section className="py-12"><h2 className="text-3xl font-bold text-white text-center mb-8">{t('service.related')}</h2><RelatedServices services={relatedServices} city={currentCity} country={countrySlug || ''} language={language} /></section>
+      )}
     </Layout>
   );
 };
