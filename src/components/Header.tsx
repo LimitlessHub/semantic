@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Menu, Phone, Globe, X, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,24 +5,17 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Link } from 'react-router-dom';
 
 export default function Header() {
-  const { language, toggleLanguage } = useLanguage();
+  const { language, toggleLanguage, t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
-  const [isCountriesOpen, setIsCountriesOpen] = useState(false);
 
   const countries = [
-    { name: 'Saudi Arabia', nameAr: 'السعودية', path: '/sa' },
-    { name: 'UAE', nameAr: 'الإمارات', path: '/ae' },
-    { name: 'Kuwait', nameAr: 'الكويت', path: '/kw' },
-    { name: 'Egypt', nameAr: 'مصر', path: '/eg' }
+    { name: t('nav.saudi'), path: '/sa' },
+    { name: t('nav.uae'), path: '/ae' },
+    { name: t('nav.kuwait'), path: '/kw' },
+    { name: t('nav.egypt'), path: '/eg' }
   ];
 
-  const services = [
-    { name: 'Plumbing', nameAr: 'السباكة', path: '/services/plumbing' },
-    { name: 'Electrical', nameAr: 'الكهرباء', path: '/services/electrical' },
-    { name: 'AC Repair', nameAr: 'تكييف', path: '/services/ac-repair' },
-    { name: 'Cleaning', nameAr: 'تنظيف', path: '/services/cleaning' }
-  ];
+  const closeMenu = () => setIsMobileMenuOpen(false);
 
   return (
     <header className="bg-blue-900/95 backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
@@ -35,163 +27,62 @@ export default function Header() {
             </Link>
           </div>
           
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex space-x-8">
-            <Link to="/" className="text-blue-100 hover:text-white transition-colors">
-              {language === 'ar' ? 'الرئيسية' : 'Home'}
-            </Link>
+          <nav className="hidden lg:flex items-center space-x-6">
+            <Link to="/" className="text-blue-100 hover:text-white transition-colors">{t('nav.home')}</Link>
             
-            {/* Countries Dropdown */}
             <div className="relative group">
-              <button
-                className="text-blue-100 hover:text-white transition-colors flex items-center"
-                onClick={() => setIsCountriesOpen(!isCountriesOpen)}
-              >
-                {language === 'ar' ? 'الدول' : 'Countries'}
-                <ChevronDown className="w-4 h-4 ml-1" />
+              <button className="text-blue-100 hover:text-white transition-colors flex items-center">
+                {t('nav.countries')}
+                <ChevronDown className="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" />
               </button>
-              <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                {countries.map((country) => (
-                  <Link
-                    key={country.path}
-                    to={country.path}
-                    className="block px-4 py-2 text-gray-800 hover:bg-blue-50 first:rounded-t-lg last:rounded-b-lg"
-                  >
-                    {language === 'ar' ? country.nameAr : country.name}
-                  </Link>
-                ))}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <div className="py-1">
+                  {countries.map((country) => (
+                    <Link key={country.path} to={country.path} className="block px-4 py-2 text-gray-800 hover:bg-blue-50">
+                      {country.name}
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Services Dropdown */}
-            <div className="relative group">
-              <button
-                className="text-blue-100 hover:text-white transition-colors flex items-center"
-                onClick={() => setIsServicesOpen(!isServicesOpen)}
-              >
-                {language === 'ar' ? 'الخدمات' : 'Services'}
-                <ChevronDown className="w-4 h-4 ml-1" />
-              </button>
-              <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                {services.map((service) => (
-                  <Link
-                    key={service.path}
-                    to={service.path}
-                    className="block px-4 py-2 text-gray-800 hover:bg-blue-50 first:rounded-t-lg last:rounded-b-lg"
-                  >
-                    {language === 'ar' ? service.nameAr : service.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            
-            <Link to="/about" className="text-blue-100 hover:text-white transition-colors">
-              {language === 'ar' ? 'من نحن' : 'About'}
-            </Link>
-            <Link to="/contact" className="text-blue-100 hover:text-white transition-colors">
-              {language === 'ar' ? 'اتصل بنا' : 'Contact'}
-            </Link>
+            <Link to="/services" className="text-blue-100 hover:text-white transition-colors">{t('nav.services')}</Link>
+            <Link to="/about" className="text-blue-100 hover:text-white transition-colors">{t('nav.about')}</Link>
+            <Link to="/contact" className="text-blue-100 hover:text-white transition-colors">{t('nav.contact')}</Link>
           </nav>
           
           <div className="flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleLanguage}
-              className="text-white hover:bg-white/10"
-            >
+            <Button variant="ghost" size="sm" onClick={toggleLanguage} className="text-white hover:bg-white/10">
               <Globe className="w-4 h-4 mr-2" />
-              {language === 'ar' ? 'EN' : 'عربي'}
+              {t('language.toggle')}
             </Button>
             
             <div className="hidden sm:flex items-center space-x-2 text-white">
               <Phone className="w-4 h-4" />
-              <span className="text-sm">24/7 Support</span>
+              <span className="text-sm">{t('hero.support')}</span>
             </div>
             
-            <button 
-              className="lg:hidden text-white"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
+            <button className="lg:hidden text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="lg:hidden mt-4 pb-4 border-t border-white/20">
             <nav className="flex flex-col space-y-4 mt-4">
-              <Link 
-                to="/" 
-                className="text-blue-100 hover:text-white transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {language === 'ar' ? 'الرئيسية' : 'Home'}
-              </Link>
-              
-              <div>
-                <button
-                  className="text-blue-100 hover:text-white transition-colors flex items-center w-full"
-                  onClick={() => setIsCountriesOpen(!isCountriesOpen)}
-                >
-                  {language === 'ar' ? 'الدول' : 'Countries'}
-                  <ChevronDown className="w-4 h-4 ml-1" />
-                </button>
-                {isCountriesOpen && (
-                  <div className="ml-4 mt-2 space-y-2">
-                    {countries.map((country) => (
-                      <Link
-                        key={country.path}
-                        to={country.path}
-                        className="block text-blue-200 hover:text-white transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {language === 'ar' ? country.nameAr : country.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+              <Link to="/" className="text-blue-100 hover:text-white" onClick={closeMenu}>{t('nav.home')}</Link>
+              <Link to="/services" className="text-blue-100 hover:text-white" onClick={closeMenu}>{t('nav.services')}</Link>
+              <Link to="/about" className="text-blue-100 hover:text-white" onClick={closeMenu}>{t('nav.about')}</Link>
+              <Link to="/contact" className="text-blue-100 hover:text-white" onClick={closeMenu}>{t('nav.contact')}</Link>
+              <div className="border-t border-white/10 pt-4">
+                <h3 className="text-white font-semibold mb-2">{t('nav.countries')}</h3>
+                {countries.map((country) => (
+                   <Link key={country.path} to={country.path} className="block text-blue-200 hover:text-white py-1" onClick={closeMenu}>
+                     {country.name}
+                   </Link>
+                ))}
               </div>
-
-              <div>
-                <button
-                  className="text-blue-100 hover:text-white transition-colors flex items-center w-full"
-                  onClick={() => setIsServicesOpen(!isServicesOpen)}
-                >
-                  {language === 'ar' ? 'الخدمات' : 'Services'}
-                  <ChevronDown className="w-4 h-4 ml-1" />
-                </button>
-                {isServicesOpen && (
-                  <div className="ml-4 mt-2 space-y-2">
-                    {services.map((service) => (
-                      <Link
-                        key={service.path}
-                        to={service.path}
-                        className="block text-blue-200 hover:text-white transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {language === 'ar' ? service.nameAr : service.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-              
-              <Link 
-                to="/about" 
-                className="text-blue-100 hover:text-white transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {language === 'ar' ? 'من نحن' : 'About'}
-              </Link>
-              <Link 
-                to="/contact" 
-                className="text-blue-100 hover:text-white transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {language === 'ar' ? 'اتصل بنا' : 'Contact'}
-              </Link>
             </nav>
           </div>
         )}
