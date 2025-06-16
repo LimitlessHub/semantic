@@ -9,18 +9,18 @@
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
+    "resolveJsonModule": true, // Recommended to be true
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
 
     /* Linting */
-    "strict": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitAny": false,
-    "noFallthroughCasesInSwitch": false,
-
+    "strict": true, // <-- تم تفعيل هذا الخيار
+    "noUnusedLocals": true, // Recommended for clean code
+    "noUnusedParameters": true, // Recommended for clean code
+    "noFallthroughCasesInSwitch": true, // Recommended for safety
+    
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
