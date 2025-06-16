@@ -17,7 +17,7 @@ export default function ServiceCoverage({ cityId }: ServiceCoverageProps) {
 
   return (
     <div>
-      <h3 className="text-xl font-bold text-white mb-4">الأحياء التي نغطيها في هذه المدينة:</h3>
+      <h3 className="text-xl font-bold text-white mb-4">الأحياء التي نغطيها:</h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
         {cityCoverage.map(area => (
           <div key={area} className="flex items-center gap-x-2 bg-white/10 p-3 rounded-md">
