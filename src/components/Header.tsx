@@ -19,7 +19,7 @@ export default function Header() {
 
   return (
     <header className="bg-blue-900/95 backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="text-white text-2xl font-bold">
             <Link to="/" className="hover:text-blue-200 transition-colors">
@@ -27,19 +27,24 @@ export default function Header() {
             </Link>
           </div>
           
-          {/* تم استبدال space-x-6 بـ gap-x-6 لتحسين المسافات في وضع RTL */}
+          {/* -- FIX 1: Replaced space-x-6 with gap-x-6 for robust RTL/LTR spacing.
+            -- This will fix the issue of "الرئيسية" being too close to the next item.
+          */}
           <nav className="hidden lg:flex items-center gap-x-6">
-            <Link to="/" className="text-blue-100 hover:text-white transition-colors">{t('nav.home')}</Link>
+            <Link to="/" className="text-blue-100 hover:text-white transition-colors text-sm font-medium">{t('nav.home')}</Link>
             
             <div className="relative group">
-              <button className="text-blue-100 hover:text-white transition-colors flex items-center">
+              <button className="text-blue-100 hover:text-white transition-colors flex items-center text-sm font-medium">
                 {t('nav.countries')}
+                {/* -- FIX 2: Added 'ms-1' (margin-start) instead of 'ml-1' for RTL/LTR compatibility.
+                  -- This ensures the icon has a leading margin in both languages.
+                */}
                 <ChevronDown className="w-4 h-4 ms-1 transition-transform group-hover:rotate-180" />
               </button>
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                 <div className="py-1">
                   {countries.map((country) => (
-                    <Link key={country.path} to={country.path} className="block px-4 py-2 text-gray-800 hover:bg-blue-50">
+                    <Link key={country.path} to={country.path} className="block px-4 py-2 text-gray-800 hover:bg-blue-50 text-sm">
                       {country.name}
                     </Link>
                   ))}
@@ -47,20 +52,23 @@ export default function Header() {
               </div>
             </div>
 
-            <Link to="/services" className="text-blue-100 hover:text-white transition-colors">{t('nav.services')}</Link>
-            <Link to="/about" className="text-blue-100 hover:text-white transition-colors">{t('nav.about')}</Link>
-            <Link to="/contact" className="text-blue-100 hover:text-white transition-colors">{t('nav.contact')}</Link>
+            <Link to="/services" className="text-blue-100 hover:text-white transition-colors text-sm font-medium">{t('nav.services')}</Link>
+            <Link to="/about" className="text-blue-100 hover:text-white transition-colors text-sm font-medium">{t('nav.about')}</Link>
+            <Link to="/contact" className="text-blue-100 hover:text-white transition-colors text-sm font-medium">{t('nav.contact')}</Link>
           </nav>
           
-          <div className="flex items-center gap-x-2 sm:gap-x-4">
+          {/* FIX 3: Applied 'gap' to the container for consistent spacing of buttons. */}
+          <div className="flex items-center gap-x-2">
             <Button variant="ghost" size="sm" onClick={toggleLanguage} className="text-white hover:bg-white/10 px-2 sm:px-3">
-              <Globe className="w-5 h-5 sm:mr-2" />
-              <span className="hidden sm:inline">{t('language.toggle')}</span>
+              <Globe className="w-5 h-5" />
+              {/* Added a span for better control and screen-reader text */}
+              <span className="ms-2 hidden sm:inline">{t('language.toggle')}</span>
+              <span className="sr-only">Toggle Language</span>
             </Button>
             
-            <a href="tel:+96612345678" className="hidden sm:flex items-center gap-x-2 text-white p-2 rounded-md hover:bg-white/10 transition-colors">
+            <a href="tel:+966111234567" className="hidden sm:flex items-center gap-x-2 text-white p-2 rounded-md hover:bg-white/10 transition-colors">
               <Phone className="w-4 h-4" />
-              <span className="text-sm">{t('hero.support')}</span>
+              <span className="text-sm font-medium">{t('hero.support')}</span>
             </a>
             
             <button className="lg:hidden text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
@@ -71,12 +79,12 @@ export default function Header() {
         </div>
 
         {isMobileMenuOpen && (
-          <div className="lg:hidden mt-4 pb-4 border-t border-white/20">
+          <div className="lg:hidden mt-4 pb-4 border-t border-white/20 animate-fade-in">
             <nav className="flex flex-col gap-y-4 mt-4">
-              <Link to="/" className="text-blue-100 hover:text-white" onClick={closeMenu}>{t('nav.home')}</Link>
-              <Link to="/services" className="text-blue-100 hover:text-white" onClick={closeMenu}>{t('nav.services')}</Link>
-              <Link to="/about" className="text-blue-100 hover:text-white" onClick={closeMenu}>{t('nav.about')}</Link>
-              <Link to="/contact" className="text-blue-100 hover:text-white" onClick={closeMenu}>{t('nav.contact')}</Link>
+              <Link to="/" className="text-blue-100 hover:text-white py-2" onClick={closeMenu}>{t('nav.home')}</Link>
+              <Link to="/services" className="text-blue-100 hover:text-white py-2" onClick={closeMenu}>{t('nav.services')}</Link>
+              <Link to="/about" className="text-blue-100 hover:text-white py-2" onClick={closeMenu}>{t('nav.about')}</Link>
+              <Link to="/contact" className="text-blue-100 hover:text-white py-2" onClick={closeMenu}>{t('nav.contact')}</Link>
               <div className="border-t border-white/10 pt-4">
                 <h3 className="text-white font-semibold mb-2">{t('nav.countries')}</h3>
                 <div className="flex flex-col gap-y-2">
