@@ -40,7 +40,7 @@ const ServicePage = () => {
         setCurrentService(foundService || null);
         setCurrentCity(foundCity || null);
         if (foundService) {
-          const related = servicesData.filter(s => s.category === foundService.category && s.id !== foundService.id).slice(0, 8);
+          const related = servicesData.filter(s => s.category === foundService.category && s.slug !== foundService.slug).slice(0, 6);
           setRelatedServices(related);
         }
       } catch (error) { console.error('Error loading service page data:', error); } 
@@ -74,9 +74,7 @@ const ServicePage = () => {
     <Layout>
       <SEOHead seoData={seoData} language={language} />
       
-      {currentService.isEmergency && (
-        <div className="container mx-auto px-4 pt-8"><UrgentServiceIndicator onUrgentRequest={handleUrgentRequest} serviceType={language === 'ar' ? currentService.nameAr : currentService.name} isAvailable={true} /></div>
-      )}
+      {currentService.isEmergency && ( <div className="container mx-auto px-4 pt-8"><UrgentServiceIndicator onUrgentRequest={handleUrgentRequest} serviceType={language === 'ar' ? currentService.nameAr : currentService.name} isAvailable={true} /></div> )}
       
       <div className="container mx-auto px-4 pt-8"><ServiceHero service={currentService} city={currentCity} country={currentCountry} language={language} averageRating={averageRating} reviewCount={cityTestimonials.length} serviceImage={serviceImage}/></div>
 
@@ -84,21 +82,18 @@ const ServicePage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
           <main className="lg:col-span-2">
             <Tabs defaultValue={language === 'ar' ? 'coverage' : 'overview'} className="w-full">
-              {/* FIX: Using programmatic reversal for tabs to ensure correct RTL layout */}
               <TabsList className="flex w-full border-b border-white/20 rounded-none bg-transparent p-0">
                 {pageTabs.map(tab => (<TabsTrigger key={tab.value} value={tab.value} className="flex-1 data-[state=active]:border-blue-400">{tab.label}</TabsTrigger>))}
               </TabsList>
               
-              {/* FIX: Removed `prose` class from the parent and applied specific styling to children */}
-              <TabsContent value="overview" className="mt-6 text-blue-100">
-                <div className="prose prose-invert max-w-none">
-                  <h2 className="text-white text-start">وصف الخدمة</h2>
-                  <p className="whitespace-pre-line leading-relaxed text-start">{(currentService as any).fullDescriptionAr}</p>
-                </div>
+              {/* FIX: Applying text-start to each tab's content to enforce RTL */}
+              <TabsContent value="overview" className="mt-6 text-start">
+                <h2 className="text-2xl font-bold text-white mb-4">وصف الخدمة</h2>
+                <p className="text-blue-100 whitespace-pre-line leading-relaxed">{(currentService as any).fullDescriptionAr}</p>
                 <ServiceFeatures />
               </TabsContent>
-              <TabsContent value="faq" className="mt-6"><ServiceFAQ serviceId={currentService.slug} /></TabsContent>
-              <TabsContent value="coverage" className="mt-6"><ServiceCoverage cityId={currentCity.id} /></TabsContent>
+              <TabsContent value="faq" className="mt-6 text-start"><ServiceFAQ serviceId={currentService.slug} /></TabsContent>
+              <TabsContent value="coverage" className="mt-6 text-start"><ServiceCoverage cityId={currentCity.id} /></TabsContent>
             </Tabs>
           </main>
           <aside className="lg:sticky lg:top-24 space-y-8" id="service-form">
@@ -109,7 +104,14 @@ const ServicePage = () => {
       </div>
       
       <div className="py-12 bg-blue-900/30"><Testimonials testimonials={cityTestimonials} /></div>
-      <div className="py-12"><RelatedServices services={relatedServices} city={currentCity} country={countrySlug || ''} language={language} /></div>
+      
+      {/* FIX: Ensure this section renders */}
+      {relatedServices.length > 0 && (
+        <div className="py-12">
+          <h2 className="text-3xl font-bold text-white text-center mb-8">{t('service.related')}</h2>
+          <RelatedServices services={relatedServices} city={currentCity} country={countrySlug || ''} language={language} />
+        </div>
+      )}
     </Layout>
   );
 };
