@@ -9,6 +9,7 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+// تم تحديث القاموس ليشمل كل النصوص المطلوبة
 const translations = {
   ar: {
     // Navigation
@@ -155,16 +156,10 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setLanguage(prev => prev === 'ar' ? 'en' : 'ar');
   };
 
+  // --- FIX: Corrected the translation function logic. ---
+  // It now correctly looks up flat keys like 'nav.home'
   const t = (key: string): string => {
-    const keys = key.split('.');
-    let result: any = translations[language];
-    for (const k of keys) {
-      result = result?.[k];
-      if (result === undefined) {
-        return key;
-      }
-    }
-    return result || key;
+    return (translations[language] as any)[key] || key;
   };
 
   return (
