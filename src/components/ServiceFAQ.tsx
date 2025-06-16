@@ -1,5 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { faqData } from "@/data/mockData"; // سنضيف هذا في mockData
+import { faqData } from "@/data/mockData";
 import { useMemo } from "react";
 
 interface ServiceFAQProps {
@@ -19,8 +19,8 @@ export default function ServiceFAQ({ serviceId }: ServiceFAQProps) {
     <Accordion type="single" collapsible className="w-full">
       {serviceFaqs.map((faq, index) => (
         <AccordionItem key={index} value={`item-${index}`} className="border-white/20">
-          <AccordionTrigger className="text-white text-start hover:no-underline">{faq.question}</AccordionTrigger>
-          <AccordionContent className="text-blue-200">{faq.answer}</AccordionContent>
+          <AccordionTrigger className="text-white text-start hover:no-underline text-base">{faq.question}</AccordionTrigger>
+          <AccordionContent className="text-blue-200 pt-2">{faq.answer}</AccordionContent>
         </AccordionItem>
       ))}
     </Accordion>
