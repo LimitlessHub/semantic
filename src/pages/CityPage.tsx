@@ -9,48 +9,11 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { getCountries, getServices, getCities } from '@/lib/cms';
 import { Country, Service, City } from '@/types';
 import SEOHead from '@/components/SEOHead';
-import { SEOData } from '@/lib/seo'; // Import SEOData type
-
-// Helper function to generate SEO for City Page
-const generateCityPageSEO = (city: City, country: Country, language: string): SEOData => {
-  const cityName = language === 'ar' ? city.nameAr : city.name;
-  const countryName = language === 'ar' ? country.nameAr : country.name;
-
-  return {
-    title: `${t('servicesIn', language)} ${cityName} | ${countryName}`,
-    description: `${t('reliableServicesDescription', language)} ${cityName}. ${t('browseAllServices', language)}.`,
-    keywords: [cityName, countryName, ...services.map(s => language === 'ar' ? s.nameAr : s.name)],
-    canonical: `/${country.slug}/${city.slug}`,
-    schemaMarkup: {
-      "@context": "https://schema.org",
-      "@type": "CollectionPage",
-      "name": `${t('servicesIn', language)} ${cityName}`,
-      "description": `All available services in ${cityName}, ${countryName}.`,
-      "url": `/${country.slug}/${city.slug}`
-    }
-  };
-};
-
-// A helper for translation since t() is in the component scope
-const t = (key: string, lang: string) => {
-  const translations = {
-    ar: {
-      servicesIn: 'خدمات في',
-      reliableServicesDescription: 'خدمات موثوقة ومتاحة على مدار الساعة في',
-      browseAllServices: 'تصفح جميع خدماتنا',
-    },
-    en: {
-      servicesIn: 'Services in',
-      reliableServicesDescription: 'Reliable services available 24/7 in',
-      browseAllServices: 'Browse all our services',
-    }
-  };
-  return translations[lang as 'ar' | 'en'][key as keyof typeof translations['en']] || key;
-}
+import { SEOData } from '@/lib/seo';
 
 const CityPage = () => {
   const { country: countrySlug, city: citySlug } = useParams();
-  const { language, t: translate } = useLanguage();
+  const { language, t } = useLanguage(); // استخدام دالة الترجمة الصحيحة من السياق
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
   const [currentCity, setCurrentCity] = useState<City | null>(null);
   const [availableServices, setAvailableServices] = useState<Service[]>([]);
@@ -95,7 +58,7 @@ const CityPage = () => {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center">
-          <div className="text-white text-xl">{translate('loading')}</div>
+          <div className="text-white text-xl">{t('loading')}</div>
         </div>
       </Layout>
     );
@@ -105,13 +68,37 @@ const CityPage = () => {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center">
-          <div className="text-white text-xl">{translate('cityNotFound')}</div>
+          <div className="text-white text-xl">{t('city.notFound')}</div>
         </div>
       </Layout>
     );
   }
 
-  const seoData = generateCityPageSEO(currentCity, currentCountry, language);
+  // --- تم نقل منطق توليد SEO إلى داخل المكون ---
+  const generateCityPageSEO = (city: City, country: Country, services: Service[]): SEOData => {
+    const cityName = language === 'ar' ? city.nameAr : city.name;
+    const countryName = language === 'ar' ? country.nameAr : country.name;
+  
+    return {
+      title: `${t('city.servicesIn')} ${cityName} | ${countryName}`,
+      description: `${t('city.reliableServices')} ${cityName}.`,
+      keywords: [
+        cityName, 
+        countryName, 
+        ...services.map(s => language === 'ar' ? s.nameAr : s.name)
+      ],
+      canonical: `/${country.slug}/${city.slug}`,
+      schemaMarkup: {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": `${t('city.servicesIn')} ${cityName}`,
+        "description": `All available services in ${cityName}, ${countryName}.`,
+        "url": `${window.location.origin}/${country.slug}/${city.slug}`
+      }
+    };
+  };
+
+  const seoData = generateCityPageSEO(currentCity, currentCountry, availableServices);
 
   return (
     <Layout>
@@ -128,10 +115,10 @@ const CityPage = () => {
             </div>
             
             <h1 className="text-5xl font-bold text-white mb-6">
-              {translate('servicesIn')} {language === 'ar' ? currentCity.nameAr : currentCity.name}
+              {t('city.servicesIn')} {language === 'ar' ? currentCity.nameAr : currentCity.name}
             </h1>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto mb-8">
-              {translate('reliableServicesDescription')} {language === 'ar' ? currentCity.nameAr : currentCity.name}
+              {t('city.reliableServices')} {language === 'ar' ? currentCity.nameAr : currentCity.name}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -141,7 +128,7 @@ const CityPage = () => {
               </div>
               <div className="flex items-center space-x-2 text-white bg-blue-600/50 px-6 py-3 rounded-lg">
                 <MessageCircle className="w-5 h-5" />
-                <span>{translate('whatsapp')}: {currentCity.whatsappNumbers[0]}</span>
+                <span>{t('whatsapp')}: {currentCity.whatsappNumbers[0]}</span>
               </div>
             </div>
           </div>
@@ -151,7 +138,7 @@ const CityPage = () => {
         <section className="py-16 bg-white/10 backdrop-blur-sm">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-white text-center mb-12">
-              {translate('availableServices')}
+              {t('city.availableServices')}
             </h2>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -160,7 +147,6 @@ const CityPage = () => {
                   <CardContent className="p-6">
                     <div className="flex items-center mb-4">
                       <span className="text-3xl mr-3">
-                        {/* Icons could be mapped from a component */}
                         {service.icon === 'wrench' && '🔧'}
                         {service.icon === 'zap' && '⚡'}
                         {service.icon === 'snowflake' && '❄️'}
@@ -179,7 +165,7 @@ const CityPage = () => {
                     </div>
                     
                     <p className="text-blue-100 mb-4 text-sm min-h-[60px]">
-                      {language === 'ar' ? service.descriptionAr : service.description}
+                      {language === 'ar' ? service.descriptionAr.substring(0, 100) : service.description.substring(0, 100)}...
                     </p>
                     
                     <div className="flex items-center justify-between mb-4 text-xs">
@@ -202,14 +188,14 @@ const CityPage = () => {
                       {service.isEmergency && (
                         <div className="flex items-center text-red-300">
                           <Shield className="w-4 h-4 mr-1" />
-                          <span className="text-xs font-bold">{translate('emergency')}</span>
+                          <span className="text-xs font-bold">{t('emergency')}</span>
                         </div>
                       )}
                     </div>
                     
                     <Link to={`/${countrySlug}/${citySlug}/${service.slug}`}>
                       <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                        {translate('bookNow')}
+                        {t('button.bookNow')}
                       </Button>
                     </Link>
                   </CardContent>
