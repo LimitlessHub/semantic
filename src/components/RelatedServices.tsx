@@ -32,7 +32,7 @@ export default function RelatedServices({ services, city, country, language }: R
                 {language === 'ar' ? service.descriptionAr.substring(0, 90) : service.description.substring(0, 90)}...
               </p>
               <Link to={`/${country}/${city.slug}/${service.slug}`} className="mt-auto w-full">
-                {/* FIX: Using high-contrast colors for the outline button */}
+                {/* FIX: Set text color to dark on hover when background becomes white */}
                 <Button variant="outline" className="w-full border-white/40 text-white hover:bg-white hover:text-blue-900 font-semibold transition-colors duration-300">
                   عرض التفاصيل
                 </Button>
