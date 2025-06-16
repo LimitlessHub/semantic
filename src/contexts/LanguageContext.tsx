@@ -67,6 +67,16 @@ const translations = {
     'whatsapp': 'واتساب',
     'emergency': 'طوارئ',
     'verified': 'موثق',
+    'form.requestFor': 'طلب خدمة',
+    'form.in': 'في',
+    'form.fullName': 'الاسم الكامل',
+    'form.phone': 'رقم الهاتف',
+    'form.email': 'البريد الإلكتروني (اختياري)',
+    'form.address': 'العنوان بالكامل',
+    'form.problemDescription': 'صف المشكلة بالتفصيل...',
+    'form.agreeToTerms': 'أوافق على شروط الخدمة وسياسة الخصوصية',
+    'form.submitting': 'جاري الإرسال...',
+    'button.submitRequest': 'إرسال طلب الخدمة',
   },
   en: {
     'nav.home': 'Home',
@@ -124,6 +134,16 @@ const translations = {
     'whatsapp': 'WhatsApp',
     'emergency': 'Emergency',
     'verified': 'Verified',
+    'form.requestFor': 'Request for',
+    'form.in': 'in',
+    'form.fullName': 'Full Name',
+    'form.phone': 'Phone Number',
+    'form.email': 'Email (Optional)',
+    'form.address': 'Full Address',
+    'form.problemDescription': 'Describe the problem in detail...',
+    'form.agreeToTerms': 'I agree to the terms of service and privacy policy',
+    'form.submitting': 'Submitting...',
+    'button.submitRequest': 'Submit Service Request',
   }
 };
 
