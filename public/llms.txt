@@ -1,0 +1,85 @@
+
+# LocalServices - Middle East Local Services Platform
+
+## Project Overview
+LocalServices is a comprehensive platform connecting customers with verified local service providers across Saudi Arabia, UAE, Kuwait, and Egypt. The platform specializes in home services including cleaning, HVAC maintenance, plumbing, electrical work, pest control, and landscaping.
+
+## Technical Architecture
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui
+- **State Management**: React Context + TanStack Query
+- **Routing**: React Router DOM
+- **Icons**: Lucide React
+- **Deployment**: Static hosting ready
+
+## Key Features
+- Bilingual support (Arabic/English) with RTL layout
+- Country-specific routing: /{country}/{city}/{service}
+- SEO optimized with Schema.org markup
+- Responsive design for mobile-first experience
+- Testimonials and rating system
+- Local phone numbers and WhatsApp integration
+- Progressive Web App capabilities
+
+## Supported Countries & Cities
+### Saudi Arabia (SA)
+- Riyadh, Jeddah, Dammam, Mecca, Medina
+- High demand: Home cleaning, AC maintenance
+
+### UAE (AE)  
+- Dubai, Abu Dhabi, Sharjah, Ajman
+- High demand: Home cleaning, AC maintenance, Landscaping
+
+### Kuwait (KW)
+- Kuwait City, Hawalli, Farwaniya  
+- High demand: AC maintenance, Pest control
+
+### Egypt (EG)
+- Cairo, Alexandria, Giza
+- High demand: AC maintenance, Home cleaning
+
+## Services Offered
+1. Home Cleaning - Professional residential cleaning
+2. AC Maintenance - Air conditioning repair and service
+3. Plumbing Services - Pipe repair and installation
+4. Electrical Services - Wiring and electrical work
+5. Pest Control - Insect and rodent extermination
+6. Landscaping - Garden and outdoor maintenance
+
+## Content Strategy
+- Local SEO optimized for each city/service combination
+- Testimonials with verified customer reviews
+- Country-specific contact information
+- Cultural adaptation for Middle Eastern market
+- Arabic-first content with English translations
+
+## Development Guidelines
+- Component-based architecture with reusable UI elements
+- TypeScript strict mode for type safety
+- Accessibility compliant (WCAG 2.1)
+- Performance optimized with code splitting
+- SEO best practices with semantic HTML
+
+## API Structure
+- RESTful endpoints for countries, cities, services
+- Testimonials and ratings management
+- Lead capture and routing system
+- Analytics integration ready
+
+## Business Model
+- Lead generation platform connecting customers to service providers
+- Commission-based revenue from successful bookings  
+- Premium listing options for service providers
+- Market expansion planned for additional MENA countries
+
+## Future Enhancements
+- Real-time chat integration
+- Payment processing system
+- Service provider dashboard
+- Mobile app development
+- AI-powered service matching
+- Multi-language expansion (French for North Africa)
+
+This platform serves the growing demand for reliable home services in the Middle East market, with localized approach for each country's specific needs and cultural preferences.
