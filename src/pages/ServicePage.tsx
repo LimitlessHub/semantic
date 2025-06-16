@@ -79,22 +79,25 @@ const ServicePage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
           <main className="lg:col-span-2">
             <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="flex w-full border-b border-white/20 rounded-none bg-transparent p-0">
-                {pageTabs.map(tab => (<TabsTrigger key={tab.value} value={tab.value} className="flex-1 data-[state=active]:border-blue-400 data-[state=active]:text-white">{tab.label}</TabsTrigger>))}
+              <TabsList className="flex w-full border-b border-white/10 rounded-none bg-transparent p-0">
+                {/* FIX: Improved colors for inactive and active tabs */}
+                {pageTabs.map(tab => (
+                  <TabsTrigger 
+                    key={tab.value} 
+                    value={tab.value} 
+                    className="flex-1 text-blue-300 data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:shadow-none border-b-2 border-transparent transition-colors duration-300"
+                  >
+                    {tab.label}
+                  </TabsTrigger>
+                ))}
               </TabsList>
               
               <div className="mt-6">
-                <TabsContent value="overview" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-                  <h2 className="text-2xl font-bold text-white mb-4 text-start">وصف الخدمة</h2>
-                  <p className="text-blue-100 whitespace-pre-line leading-relaxed text-start">{(currentService as any).fullDescriptionAr || 'وصف الخدمة غير متوفر حاليًا.'}</p>
-                </TabsContent>
+                <TabsContent value="overview" dir={language === 'ar' ? 'rtl' : 'ltr'}><h2 className="text-2xl font-bold text-white mb-4 text-start">وصف الخدمة</h2><p className="text-gray-300 whitespace-pre-line leading-relaxed text-start">{(currentService as any).fullDescriptionAr || 'وصف الخدمة غير متوفر حاليًا.'}</p><ServiceFeatures /></TabsContent>
                 <TabsContent value="faq" dir={language === 'ar' ? 'rtl' : 'ltr'}><ServiceFAQ serviceId={currentService.slug} /></TabsContent>
                 <TabsContent value="coverage" dir={language === 'ar' ? 'rtl' : 'ltr'}><ServiceCoverage cityId={currentCity.id} /></TabsContent>
               </div>
             </Tabs>
-            
-            {/* FIX: ServiceFeatures is now separate from the tabs, as you suggested. */}
-            <ServiceFeatures />
           </main>
           <aside className="lg:sticky lg:top-24 space-y-8" id="service-form">
             <AvailabilityStatus serviceId={currentService.id} cityId={currentCity.slug} />
@@ -105,15 +108,9 @@ const ServicePage = () => {
       
       <div className="py-12 bg-blue-900/30"><Testimonials testimonials={testimonials.filter(t => t.serviceId === currentService.slug)} /></div>
       
-      {/* FIX: Ensure RelatedServices renders correctly */}
-      <section className="py-12">
-        <h2 className="text-3xl font-bold text-white text-center mb-8">{t('service.related')}</h2>
-        {relatedServices.length > 0 ? (
-          <RelatedServices services={relatedServices} city={currentCity} country={countrySlug || ''} language={language} />
-        ) : (
-          <p className="text-center text-blue-200">(ملاحظة للمطور: لم يتم العثور على خدمات أخرى في نفس الفئة لعرضها هنا)</p>
-        )}
-      </section>
+      {relatedServices.length > 0 && (
+        <section className="py-12"><h2 className="text-3xl font-bold text-white text-center mb-8">{t('service.related')}</h2><RelatedServices services={relatedServices} city={currentCity} country={countrySlug || ''} language={language} /></section>
+      )}
     </Layout>
   );
 };
