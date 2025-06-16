@@ -11,10 +11,8 @@ export default function ServiceFAQ({ serviceId }: ServiceFAQProps) {
     const { language } = useLanguage();
     const serviceFaqs = useMemo(() => faqData.filter(faq => faq.serviceId === serviceId), [serviceId]);
     
-    const textAlignStyle = { textAlign: language === 'ar' ? 'right' : 'left' } as const;
-
     if (serviceFaqs.length === 0) {
-        return <p className="text-blue-200" style={textAlignStyle}>لا توجد أسئلة شائعة لهذه الخدمة حاليًا.</p>;
+        return <p className={`text-blue-200 ${language === 'ar' ? 'text-right' : 'text-left'}`}>لا توجد أسئلة شائعة لهذه الخدمة حاليًا.</p>;
     }
 
     return (
@@ -22,14 +20,12 @@ export default function ServiceFAQ({ serviceId }: ServiceFAQProps) {
             <Accordion type="single" collapsible className="w-full">
                 {serviceFaqs.map((faq, index) => (
                     <AccordionItem key={index} value={`item-${index}`} className="border-white/20">
-                        <AccordionTrigger className="hover:no-underline text-white" style={textAlignStyle}>
+                        <AccordionTrigger className={`hover:no-underline text-white text-base ${language === 'ar' ? 'text-right' : 'text-left'}`}>
                            {faq.question}
                         </AccordionTrigger>
-                        {/* FIX: Applied text color and alignment directly to the content */}
-                        <AccordionContent>
-                            <p className="text-blue-200 pt-2" style={textAlignStyle}>
-                                {faq.answer}
-                            </p>
+                        {/* FIX: Using a clearer, higher-contrast text color */}
+                        <AccordionContent className="text-gray-300 pt-2 text-start">
+                            {faq.answer}
                         </AccordionContent>
                     </AccordionItem>
                 ))}
