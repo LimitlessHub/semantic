@@ -62,13 +62,12 @@ const ServicePage = () => {
   const averageRating = 4.8;
   const serviceImage = `/images/services/${currentService.slug}.jpg`;
   
+  // FIX: Defining tab content with explicit alignment for RTL.
   const pageTabs = [
     { value: "overview", label: "نظرة عامة", content: (
-      // FIX: Forcing text-alignment programmatically
       <div className={language === 'ar' ? 'text-right' : 'text-left'}>
         <h2 className="text-2xl font-bold text-white mb-4">وصف الخدمة</h2>
         <p className="text-gray-300 whitespace-pre-line leading-relaxed">{(currentService as any).fullDescriptionAr || 'وصف الخدمة غير متوفر حاليًا.'}</p>
-        <ServiceFeatures />
       </div>
     )},
     { value: "faq", label: "الأسئلة الشائعة", content: <ServiceFAQ serviceId={currentService.slug} /> },
@@ -86,7 +85,11 @@ const ServicePage = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
           <main className="lg:col-span-2">
+            {/* The CustomTabs component will handle layout and state */}
             <CustomTabs tabs={pageTabs} defaultValue="overview" />
+            
+            {/* ServiceFeatures is now outside and independent */}
+            <ServiceFeatures />
           </main>
           <aside className="lg:sticky lg:top-24 space-y-8" id="service-form">
             <AvailabilityStatus serviceId={currentService.id} cityId={currentCity.slug} />
