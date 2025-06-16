@@ -13,13 +13,22 @@ export default function ServiceFeatures() {
 
   return (
     <div className="mt-10">
-      {/* FIX: Using explicit text-align classes based on language */}
       <h3 className={`text-2xl font-bold text-white mb-6 ${language === 'ar' ? 'text-right' : 'text-left'}`}>{t('service.bestChoice')}</h3>
       <div className="space-y-4">
         {features.map((feature, index) => (
-          <div key={index} className={`flex items-start gap-x-3 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
-            <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-1" />
-            <span className={`text-gray-200 leading-relaxed ${language === 'ar' ? 'text-right' : 'text-left'}`}>{feature}</span>
+          // FIX: Using two different JSX structures to guarantee correct order and alignment.
+          <div key={index}>
+            {language === 'ar' ? (
+              <div className="flex items-start gap-x-3 text-right">
+                <span className="flex-1 text-gray-200 leading-relaxed">{feature}</span>
+                <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-1" />
+              </div>
+            ) : (
+              <div className="flex items-start gap-x-3 text-left">
+                <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-1" />
+                <span className="text-gray-200 leading-relaxed">{feature}</span>
+              </div>
+            )}
           </div>
         ))}
       </div>
