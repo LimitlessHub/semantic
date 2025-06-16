@@ -61,11 +61,6 @@ const ServicePage = () => {
   const seoData = generateServicePageSEO(currentService, currentCity, currentCountry, language);
   const averageRating = 4.8;
   const serviceImage = `/images/services/${currentService.slug}.jpg`;
-  
-  const pageTabs = [
-    { value: "overview", label: "نظرة عامة" }, { value: "faq", label: "الأسئلة الشائعة" }, { value: "coverage", label: "مناطق التغطية" },
-  ];
-  if (language === 'ar') { pageTabs.reverse(); }
 
   return (
     <Layout>
@@ -79,25 +74,21 @@ const ServicePage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
           <main className="lg:col-span-2">
             <Tabs defaultValue="overview" className="w-full">
+              {/* FIX: Removed programmatic reversal. The new plugin will handle flex direction automatically */}
               <TabsList className="flex w-full border-b border-white/10 rounded-none bg-transparent p-0">
-                {/* FIX: Set text color for active and inactive states correctly */}
-                {pageTabs.map(tab => (
-                  <TabsTrigger 
-                    key={tab.value} 
-                    value={tab.value} 
-                    className="flex-1 text-blue-200/70 hover:text-white data-[state=active]:text-white data-[state=active]:bg-white/10 rounded-t-md border-b-2 border-transparent data-[state=active]:border-blue-400 transition-colors duration-300"
-                  >
-                    {tab.label}
-                  </TabsTrigger>
-                ))}
+                  <TabsTrigger value="overview" className="flex-1 text-blue-300 data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:shadow-none border-b-2 border-transparent transition-colors duration-300">نظرة عامة</TabsTrigger>
+                  <TabsTrigger value="faq" className="flex-1 text-blue-300 data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:shadow-none border-b-2 border-transparent transition-colors duration-300">الأسئلة الشائعة</TabsTrigger>
+                  <TabsTrigger value="coverage" className="flex-1 text-blue-300 data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:shadow-none border-b-2 border-transparent transition-colors duration-300">مناطق التغطية</TabsTrigger>
               </TabsList>
               
-              <div className="mt-6">
-                <TabsContent value="overview" dir={language === 'ar' ? 'rtl' : 'ltr'}><h2 className="text-2xl font-bold text-white mb-4 text-start">وصف الخدمة</h2><p className="text-gray-300 whitespace-pre-line leading-relaxed text-start">{(currentService as any).fullDescriptionAr || 'وصف الخدمة غير متوفر حاليًا.'}</p><ServiceFeatures /></TabsContent>
-                <TabsContent value="faq" dir={language === 'ar' ? 'rtl' : 'ltr'}><ServiceFAQ serviceId={currentService.slug} /></TabsContent>
-                <TabsContent value="coverage" dir={language === 'ar' ? 'rtl' : 'ltr'}><ServiceCoverage cityId={currentCity.id} /></TabsContent>
+              {/* FIX: Using `text-start` which is now powered by the RTL plugin */}
+              <div className="mt-6 text-start">
+                <TabsContent value="overview"><h2 className="text-2xl font-bold text-white mb-4">وصف الخدمة</h2><p className="text-gray-300 whitespace-pre-line leading-relaxed">{(currentService as any).fullDescriptionAr || 'وصف الخدمة غير متوفر حاليًا.'}</p></TabsContent>
+                <TabsContent value="faq"><ServiceFAQ serviceId={currentService.slug} /></TabsContent>
+                <TabsContent value="coverage"><ServiceCoverage cityId={currentCity.id} /></TabsContent>
               </div>
             </Tabs>
+            <ServiceFeatures />
           </main>
           <aside className="lg:sticky lg:top-24 space-y-8" id="service-form">
             <AvailabilityStatus serviceId={currentService.id} cityId={currentCity.slug} />
