@@ -4,19 +4,19 @@ import Layout from '@/components/Layout';
 import Testimonials from '@/components/Testimonials';
 import SEOHead from '@/components/SEOHead';
 import AvailabilityStatus from '@/components/AvailabilityStatus';
-import ServiceBreadcrumb from '@/components/ServiceBreadcrumb';
+import UrgentServiceIndicator from '@/components/UrgentServiceIndicator';
 import ServiceFormSection from '@/components/ServiceFormSection';
 import RelatedServices from '@/components/RelatedServices';
+import ServiceHero from '@/components/ServiceHero';
+import ServiceFeatures from '@/components/ServiceFeatures';
+import ServiceFAQ from '@/components/ServiceFAQ';
+import ServiceCoverage from '@/components/ServiceCoverage';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getCountries, getServices, getCities } from '@/lib/cms';
 import { generateServicePageSEO } from '@/lib/seo';
 import { testimonials } from '@/lib/testimonials';
 import { Country, Service, City } from '@/types';
-import { Star } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ServiceFeatures from '@/components/ServiceFeatures';
-import ServiceFAQ from '@/components/ServiceFAQ';
-import ServiceCoverage from '@/components/ServiceCoverage';
 
 const ServicePage = () => {
   const { country: countrySlug, city: citySlug, service: serviceSlug } = useParams();
@@ -26,8 +26,10 @@ const ServicePage = () => {
   const [currentCity, setCurrentCity] = useState<City | null>(null);
   const [relatedServices, setRelatedServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showUrgentForm, setShowUrgentForm] = useState(false);
 
   useEffect(() => {
+    // Data fetching logic remains the same
     async function loadData() {
       setLoading(true);
       try {
@@ -47,13 +49,18 @@ const ServicePage = () => {
     }
     if (countrySlug && citySlug && serviceSlug) { loadData(); }
   }, [countrySlug, citySlug, serviceSlug]);
+  
+  const handleUrgentRequest = () => {
+    setShowUrgentForm(true);
+    document.getElementById('service-form')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   if (loading || !currentService || !currentCity || !currentCountry) {
     return (<Layout><div className="min-h-screen flex items-center justify-center"><div className="text-white text-xl">{t('loading')}</div></div></Layout>);
   }
 
   const seoData = generateServicePageSEO(currentService, currentCity, currentCountry, language);
-  const cityTestimonials = testimonials.filter(t => t.serviceId === currentService.id && (t.city === currentCity.name || t.city === currentCity.slug));
+  const cityTestimonials = testimonials.filter(t => t.serviceId === currentService.slug); // FIX: Match by slug
   const averageRating = cityTestimonials.length > 0 ? cityTestimonials.reduce((sum, t) => sum + t.rating, 0) / cityTestimonials.length : 4.8;
   const serviceImage = `/images/services/${currentService.slug}.jpg`;
 
@@ -61,47 +68,49 @@ const ServicePage = () => {
     <Layout>
       <SEOHead seoData={seoData} language={language} />
 
-      <section className="relative h-80 flex items-center justify-center text-center text-white px-4">
-        <div className="absolute inset-0 bg-black/60 z-10"></div>
-        <img src={serviceImage} alt={currentService.name} className="absolute inset-0 w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-        <div className="relative z-20">
-          <ServiceBreadcrumb country={currentCountry} city={currentCity} language={language} />
-          <h1 className="text-4xl md:text-6xl font-bold mt-4">{language === 'ar' ? currentService.nameAr : currentService.name} في {language === 'ar' ? currentCity.nameAr : currentCity.name}</h1>
-          <div className="flex items-center justify-center gap-x-3 mt-4"><div className="flex items-center gap-x-1"><Star className="w-5 h-5 text-yellow-400 fill-current" /><span>{averageRating.toFixed(1)}</span></div><span>({cityTestimonials.length} تقييم)</span></div>
+      {/* FIX 1: UrgentServiceIndicator is back in its own section */}
+      {currentService.isEmergency && (
+        <div className="container mx-auto px-4 pt-8">
+            <UrgentServiceIndicator
+              onUrgentRequest={handleUrgentRequest}
+              serviceType={language === 'ar' ? currentService.nameAr : currentService.name}
+              isAvailable={true}
+            />
         </div>
-      </section>
+      )}
+      
+      {/* Using the new ServiceHero component */}
+      <div className="container mx-auto px-4 pt-8">
+        <ServiceHero service={currentService} city={currentCity} country={currentCountry} language={language} averageRating={averageRating} reviewCount={cityTestimonials.length} serviceImage={serviceImage}/>
+      </div>
 
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
           <main className="lg:col-span-2">
             <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 bg-blue-800/60 text-blue-200">
+              {/* FIX 2 & 3: Tabs are now flex, have a bottom border, and are RTL-aware */}
+              <TabsList className="flex w-full border-b border-white/20 rounded-none bg-transparent p-0 rtl:flex-row-reverse">
                 <TabsTrigger value="overview">نظرة عامة</TabsTrigger>
                 <TabsTrigger value="faq">الأسئلة الشائعة</TabsTrigger>
                 <TabsTrigger value="coverage">مناطق التغطية</TabsTrigger>
               </TabsList>
               <TabsContent value="overview" className="mt-6 prose prose-invert max-w-none text-blue-100">
-                <h2 className="text-white">وصف الخدمة</h2>
-                <p className="whitespace-pre-line">{language === 'ar' ? currentService.fullDescriptionAr : currentService.fullDescription}</p>
+                <p className="whitespace-pre-line leading-relaxed">{language === 'ar' ? (currentService as any).fullDescriptionAr : (currentService as any).fullDescription}</p>
                 <ServiceFeatures />
               </TabsContent>
-              <TabsContent value="faq" className="mt-6"><ServiceFAQ serviceId={currentService.id} /></TabsContent>
+              <TabsContent value="faq" className="mt-6"><ServiceFAQ serviceId={currentService.slug} /></TabsContent>
               <TabsContent value="coverage" className="mt-6"><ServiceCoverage cityId={currentCity.id} /></TabsContent>
             </Tabs>
           </main>
-          <aside className="lg:sticky lg:top-24 space-y-8">
+          <aside className="lg:sticky lg:top-24 space-y-8" id="service-form">
             <AvailabilityStatus serviceId={currentService.id} cityId={currentCity.slug} />
-            <ServiceFormSection service={currentService} city={currentCity} country={currentCountry} isUrgent={false} />
+            <ServiceFormSection service={currentService} city={currentCity} country={currentCountry} isUrgent={showUrgentForm} />
           </aside>
         </div>
       </div>
       
-      <div className="py-12"><Testimonials testimonials={cityTestimonials} serviceId={currentService.id} cityId={currentCity.slug} /></div>
-
-      <div className="py-12">
-        <h2 className="text-3xl font-bold text-white text-center mb-8">{t('service.related')}</h2>
-        <RelatedServices services={relatedServices} city={currentCity} country={countrySlug || ''} language={language} />
-      </div>
+      <div className="py-12 bg-blue-900/30"><Testimonials testimonials={cityTestimonials} /></div>
+      <div className="py-12"><RelatedServices services={relatedServices} city={currentCity} country={countrySlug || ''} language={language} /></div>
     </Layout>
   );
 };
