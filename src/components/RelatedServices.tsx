@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Service, City } from '@/types';
 import ServiceIcon from './ServiceIcon';
@@ -12,44 +12,34 @@ interface RelatedServicesProps {
 }
 
 export default function RelatedServices({ services, city, country, language }: RelatedServicesProps) {
-  if (services.length === 0) return null;
+  if (!services || services.length === 0) {
+    return null; // Return nothing if there are no related services
+  }
 
   return (
     <div className="container mx-auto px-4">
-      <Carousel
-        opts={{
-          align: "start",
-          loop: true,
-        }}
-        className="w-full"
-      >
-        <CarouselContent>
-          {services.map((service) => (
-            <CarouselItem key={service.id} className="md:basis-1/2 lg:basis-1/3">
-              <div className="p-1">
-                <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300 h-full">
-                  <CardContent className="flex flex-col items-center justify-center p-6 text-center h-full">
-                    <ServiceIcon iconName={service.icon} className="w-12 h-12 text-blue-300 mb-4" />
-                    <h4 className="text-lg font-semibold text-white mb-2">
-                      {language === 'ar' ? service.nameAr : service.name}
-                    </h4>
-                    <p className="text-sm text-blue-200 mb-4 flex-grow">
-                      {language === 'ar' ? service.descriptionAr.substring(0, 70) : service.description.substring(0, 70)}...
-                    </p>
-                    <Link to={`/${country}/${city.slug}/${service.slug}`} className="mt-auto w-full">
-                      <div className="bg-blue-600 text-white rounded-md py-2 px-4 hover:bg-blue-700 transition-colors w-full">
-                        عرض التفاصيل
-                      </div>
-                    </Link>
-                  </CardContent>
-                </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {services.map((service) => (
+          <Card key={service.id} className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300 h-full">
+            <CardContent className="flex flex-col p-6 h-full">
+              <div className="flex items-center gap-x-4 mb-3">
+                <ServiceIcon iconName={service.icon} className="w-10 h-10 text-blue-300 flex-shrink-0" />
+                <h4 className="text-lg font-semibold text-white text-start">
+                  {language === 'ar' ? service.nameAr : service.name}
+                </h4>
               </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious className="hidden sm:flex" />
-        <CarouselNext className="hidden sm:flex" />
-      </Carousel>
+              <p className="text-sm text-blue-200 mb-4 flex-grow text-start">
+                {language === 'ar' ? service.descriptionAr.substring(0, 90) : service.description.substring(0, 90)}...
+              </p>
+              <Link to={`/${country}/${city.slug}/${service.slug}`} className="mt-auto w-full">
+                <Button variant="outline" className="w-full border-blue-400 text-blue-300 hover:bg-blue-500 hover:text-white">
+                  عرض التفاصيل
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
