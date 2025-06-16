@@ -40,7 +40,7 @@ const ServicePage = () => {
         setCurrentService(foundService || null);
         setCurrentCity(foundCity || null);
         if (foundService) {
-          const related = servicesData.filter(s => s.category === foundService.category && s.slug !== foundService.slug).slice(0, 6);
+          const related = servicesData.filter(s => s.category === foundService.category && s.slug !== foundService.slug);
           setRelatedServices(related);
         }
       } catch (error) { console.error('Error loading service page data:', error); } 
@@ -54,6 +54,9 @@ const ServicePage = () => {
     document.getElementById('service-form')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // --- DEBUGGING STEP ---
+  console.log("DEBUG: Related Services array has", relatedServices.length, "items.", relatedServices);
+
   if (loading || !currentService || !currentCity || !currentCountry) {
     return (<Layout><div className="min-h-screen flex items-center justify-center"><div className="text-white text-xl">{t('loading')}</div></div></Layout>);
   }
@@ -64,20 +67,15 @@ const ServicePage = () => {
   const serviceImage = `/images/services/${currentService.slug}.jpg`;
 
   const pageTabs = [
-    { value: "overview", label: "نظرة عامة" },
-    { value: "faq", label: "الأسئلة الشائعة" },
-    { value: "coverage", label: "مناطق التغطية" },
+    { value: "overview", label: "نظرة عامة" }, { value: "faq", label: "الأسئلة الشائعة" }, { value: "coverage", label: "مناطق التغطية" },
   ];
   if (language === 'ar') { pageTabs.reverse(); }
 
   return (
     <Layout>
       <SEOHead seoData={seoData} language={language} />
-      
       {currentService.isEmergency && ( <div className="container mx-auto px-4 pt-8"><UrgentServiceIndicator onUrgentRequest={handleUrgentRequest} serviceType={language === 'ar' ? currentService.nameAr : currentService.name} isAvailable={true} /></div> )}
-      
       <div className="container mx-auto px-4 pt-8"><ServiceHero service={currentService} city={currentCity} country={currentCountry} language={language} averageRating={averageRating} reviewCount={cityTestimonials.length} serviceImage={serviceImage}/></div>
-
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
           <main className="lg:col-span-2">
@@ -85,15 +83,9 @@ const ServicePage = () => {
               <TabsList className="flex w-full border-b border-white/20 rounded-none bg-transparent p-0">
                 {pageTabs.map(tab => (<TabsTrigger key={tab.value} value={tab.value} className="flex-1 data-[state=active]:border-blue-400">{tab.label}</TabsTrigger>))}
               </TabsList>
-              
-              {/* FIX: Applying explicit text alignment to each tab's content */}
-              <div className={`mt-6 ${language === 'ar' ? 'text-right' : 'text-left'}`}>
-                <TabsContent value="overview">
-                    <h2 className="text-2xl font-bold text-white mb-4">وصف الخدمة</h2>
-                    <p className="text-blue-100 whitespace-pre-line leading-relaxed">{(currentService as any).fullDescriptionAr}</p>
-                    <ServiceFeatures />
-                </TabsContent>
-                <TabsContent value="faq"><ServiceFAQ /></TabsContent>
+              <div className="mt-6">
+                <TabsContent value="overview"><div className={language === 'ar' ? 'text-right' : 'text-left'}><h2 className="text-2xl font-bold text-white mb-4">وصف الخدمة</h2><p className="text-blue-100 whitespace-pre-line leading-relaxed">{(currentService as any).fullDescriptionAr}</p><ServiceFeatures /></div></TabsContent>
+                <TabsContent value="faq"><ServiceFAQ serviceId={currentService.slug} /></TabsContent>
                 <TabsContent value="coverage"><ServiceCoverage cityId={currentCity.id} /></TabsContent>
               </div>
             </Tabs>
@@ -104,16 +96,15 @@ const ServicePage = () => {
           </aside>
         </div>
       </div>
-      
       <div className="py-12 bg-blue-900/30"><Testimonials testimonials={cityTestimonials} /></div>
-      
-      {/* FIX: Conditionally rendering the entire section to ensure it appears */}
-      {relatedServices.length > 0 && (
-        <section className="py-12">
-          <h2 className="text-3xl font-bold text-white text-center mb-8">{t('service.related')}</h2>
+      <section className="py-12">
+        <h2 className="text-3xl font-bold text-white text-center mb-8">{t('service.related')}</h2>
+        {relatedServices.length > 0 ? (
           <RelatedServices services={relatedServices} city={currentCity} country={countrySlug || ''} language={language} />
-        </section>
-      )}
+        ) : (
+          <p className="text-center text-blue-200">لا توجد خدمات أخرى مشابهة في هذه الفئة حاليًا.</p>
+        )}
+      </section>
     </Layout>
   );
 };
