@@ -32,11 +32,8 @@ export default function RelatedServices({ services, city, country, language }: R
                 {language === 'ar' ? service.descriptionAr.substring(0, 90) : service.description.substring(0, 90)}...
               </p>
               <Link to={`/${country}/${city.slug}/${service.slug}`} className="mt-auto w-full">
-                {/* --- FINAL FIX: Added `hover:text-blue-900` to make text visible on hover --- */}
-                <Button 
-                  variant="outline" 
-                  className="w-full border-white/40 text-white hover:bg-white hover:text-blue-900 font-semibold transition-colors duration-300"
-                >
+                {/* FINAL FIX: Explicit text color change on hover */}
+                <Button variant="outline" className="w-full border-white/40 text-white hover:bg-white hover:text-blue-900 font-semibold transition-colors duration-300">
                   عرض التفاصيل
                 </Button>
               </Link>
