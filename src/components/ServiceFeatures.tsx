@@ -2,7 +2,8 @@ import { CheckCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function ServiceFeatures() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
   const features = [
     t('service.features.certified'),
     t('service.features.fast'),
@@ -11,14 +12,14 @@ export default function ServiceFeatures() {
   ];
 
   return (
-    <div className="mt-10 text-start">
-      <h3 className="text-2xl font-bold text-white mb-6">{t('service.bestChoice')}</h3>
+    <div className="mt-10">
+      {/* FIX: Using explicit text-align classes based on language */}
+      <h3 className={`text-2xl font-bold text-white mb-6 ${language === 'ar' ? 'text-right' : 'text-left'}`}>{t('service.bestChoice')}</h3>
       <div className="space-y-4">
         {features.map((feature, index) => (
-          // The `gap-x-3` will be automatically handled by the new plugin for RTL
-          <div key={index} className="flex items-start gap-x-3">
+          <div key={index} className={`flex items-start gap-x-3 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
             <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-1" />
-            <span className="text-gray-200 leading-relaxed">{feature}</span>
+            <span className={`text-gray-200 leading-relaxed ${language === 'ar' ? 'text-right' : 'text-left'}`}>{feature}</span>
           </div>
         ))}
       </div>
