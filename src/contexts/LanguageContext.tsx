@@ -9,10 +9,9 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-// تم تحديث القاموس ليشمل كل النصوص المطلوبة
+// قاموس الترجمة الكامل
 const translations = {
   ar: {
-    // Navigation
     'nav.home': 'الرئيسية',
     'nav.about': 'من نحن',
     'nav.contact': 'اتصل بنا',
@@ -24,15 +23,11 @@ const translations = {
     'nav.egypt': 'مصر',
     'nav.privacy': 'سياسة الخصوصية',
     'nav.terms': 'الشروط والأحكام',
-
-    // Hero Section
     'hero.title': 'ابحث عن خدمات محلية',
     'hero.subtitle': 'في جميع أنحاء الشرق الأوسط',
     'hero.description': 'تواصل مع محترفين معتمدين في السعودية، الإمارات، الكويت، ومصر. احصل على عروض أسعار فورية وخدمة موثوقة لمنزلك وعملك.',
     'hero.call': 'اتصل الآن: +966-XXX-XXXX',
     'hero.support': 'دعم 24/7',
-
-    // Pages
     'about.title': 'عن LocalServices',
     'about.mission': 'مهمتنا',
     'contact.title': 'اتصل بنا',
@@ -42,16 +37,13 @@ const translations = {
     'privacy.title': 'سياسة الخصوصية',
     'notFound.title': 'الصفحة غير موجودة',
     'notFound.description': 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.',
-
-    // Buttons & Common
     'button.viewServices': 'عرض الخدمات',
     'button.viewDetails': 'عرض التفاصيل',
     'button.bookNow': 'احجز الآن',
     'button.goBack': 'العودة',
     'button.goHome': 'الرئيسية',
+    'button.contact': 'اتصل الآن',
     'language.toggle': 'EN',
-    
-    // City Page
     'city.servicesIn': 'الخدمات في',
     'city.reliableServices': 'خدمات موثوقة ومتاحة على مدار الساعة في',
     'city.availableServices': 'الخدمات المتاحة',
@@ -62,22 +54,21 @@ const translations = {
     'city.status': 'الحالة',
     'city.capital': 'العاصمة',
     'city.notFound': 'المدينة غير موجودة',
-
-    // Service Page
     'service.notFound': 'الخدمة غير متوفرة',
     'service.notAvailable': 'قد لا تكون الخدمة المطلوبة متوفرة في هذه المدينة، أو أن الرابط غير صحيح.',
     'service.checkURL': 'يرجى التحقق من الرابط أو الانتقال من صفحتنا الرئيسية.',
     'service.bestChoice': 'لماذا نحن الأفضل؟',
     'service.related': 'خدمات ذات صلة في',
-
-    // Others
+    'service.features.certified': 'فنيون معتمدون ومؤهلون',
+    'service.features.fast': 'خدمة سريعة في نفس اليوم',
+    'service.features.warranty': 'ضمان على جميع الأعمال',
+    'service.features.pricing': 'أسعار تنافسية وشفافة',
     'loading': 'جاري التحميل...',
     'whatsapp': 'واتساب',
     'emergency': 'طوارئ',
     'verified': 'موثق',
   },
   en: {
-    // Navigation
     'nav.home': 'Home',
     'nav.about': 'About Us',
     'nav.contact': 'Contact Us',
@@ -89,15 +80,11 @@ const translations = {
     'nav.egypt': 'Egypt',
     'nav.privacy': 'Privacy Policy',
     'nav.terms': 'Terms & Conditions',
-
-    // Hero Section
     'hero.title': 'Find Local Services',
     'hero.subtitle': 'Across the Middle East',
     'hero.description': 'Connect with verified local professionals in Saudi Arabia, UAE, Kuwait, and Egypt. Get instant quotes and reliable service for your home and business needs.',
     'hero.call': 'Call Now: +966-XXX-XXXX',
     'hero.support': '24/7 Support',
-
-    // Pages
     'about.title': 'About LocalServices',
     'about.mission': 'Our Mission',
     'contact.title': 'Contact Us',
@@ -107,16 +94,13 @@ const translations = {
     'privacy.title': 'Privacy Policy',
     'notFound.title': 'Page Not Found',
     'notFound.description': "The page you're looking for doesn't exist or has been moved.",
-
-    // Buttons & Common
     'button.viewServices': 'View Services',
     'button.viewDetails': 'View Details',
     'button.bookNow': 'Book Now',
     'button.goBack': 'Go Back',
     'button.goHome': 'Go Home',
+    'button.contact': 'Call Now',
     'language.toggle': 'عربي',
-
-    // City Page
     'city.servicesIn': 'Services in',
     'city.reliableServices': 'Reliable services available 24/7 in',
     'city.availableServices': 'Available Services',
@@ -127,15 +111,15 @@ const translations = {
     'city.status': 'Status',
     'city.capital': 'Capital',
     'city.notFound': 'City not found',
-    
-    // Service Page
     'service.notFound': 'Service Not Available',
     'service.notAvailable': 'The requested service may not be available in this city, or the URL is incorrect.',
     'service.checkURL': 'Please check the URL or navigate from our homepage.',
     'service.bestChoice': 'Why Choose Us?',
     'service.related': 'Related Services in',
-
-    // Others
+    'service.features.certified': 'Certified & Qualified Technicians',
+    'service.features.fast': 'Fast, Same-Day Service',
+    'service.features.warranty': 'Warranty on All Work',
+    'service.features.pricing': 'Competitive & Transparent Pricing',
     'loading': 'Loading...',
     'whatsapp': 'WhatsApp',
     'emergency': 'Emergency',
@@ -156,8 +140,8 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setLanguage(prev => prev === 'ar' ? 'en' : 'ar');
   };
 
-  // --- FIX: Corrected the translation function logic. ---
-  // It now correctly looks up flat keys like 'nav.home'
+  // --- FIX: This is the corrected, simplified translation function. ---
+  // It performs a direct lookup without splitting the key.
   const t = (key: string): string => {
     return (translations[language] as any)[key] || key;
   };
