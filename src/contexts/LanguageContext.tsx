@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface LanguageContextType {
@@ -14,136 +13,132 @@ const translations = {
   ar: {
     // Navigation
     'nav.home': 'الرئيسية',
-    'nav.about': 'عنا',
+    'nav.about': 'من نحن',
     'nav.contact': 'اتصل بنا',
+    'nav.services': 'الخدمات',
+    'nav.countries': 'الدول',
+    'nav.saudi': 'السعودية',
+    'nav.uae': 'الإمارات',
+    'nav.kuwait': 'الكويت',
+    'nav.egypt': 'مصر',
     'nav.privacy': 'سياسة الخصوصية',
     'nav.terms': 'الشروط والأحكام',
-    'nav.faq': 'الأسئلة الشائعة',
-    'nav.howItWorks': 'كيف يعمل',
-    'nav.countries': 'الدول',
-    'nav.services': 'الخدمات',
-    
-    // About Page
-    'about.title': 'عن شركتنا',
-    'about.description': 'نحن منصة رائدة في ربط العملاء بمقدمي الخدمات المحليين المتخصصين في المملكة العربية السعودية والإمارات والكويت ومصر',
+
+    // Hero Section
+    'hero.title': 'ابحث عن خدمات محلية',
+    'hero.subtitle': 'في جميع أنحاء الشرق الأوسط',
+    'hero.description': 'تواصل مع محترفين معتمدين في السعودية، الإمارات، الكويت، ومصر. احصل على عروض أسعار فورية وخدمة موثوقة لمنزلك وعملك.',
+    'hero.call': 'اتصل الآن: +966-XXX-XXXX',
+    'hero.support': 'دعم 24/7',
+
+    // Pages
+    'about.title': 'عن LocalServices',
     'about.mission': 'مهمتنا',
-    'about.missionText': 'نسعى لتوفير خدمات موثوقة وسريعة لعملائنا',
-    
-    // Contact Page
     'contact.title': 'اتصل بنا',
-    'contact.description': 'تواصل معنا للحصول على أفضل الخدمات المحلية',
-    'contact.phone': 'الهاتف',
-    'contact.whatsapp': 'واتساب',
-    'contact.available': 'متاح 24/7',
+    'services.title': 'جميع الخدمات',
+    'services.description': 'تصفح جميع خدماتنا المتاحة في المنطقة.',
+    'terms.title': 'الشروط والأحكام',
+    'privacy.title': 'سياسة الخصوصية',
+    'notFound.title': 'الصفحة غير موجودة',
+    'notFound.description': 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.',
+
+    // Buttons & Common
+    'button.viewServices': 'عرض الخدمات',
+    'button.viewDetails': 'عرض التفاصيل',
+    'button.bookNow': 'احجز الآن',
+    'button.goBack': 'العودة',
+    'button.goHome': 'الرئيسية',
+    'language.toggle': 'EN',
     
-    // Services
-    'servicesIn': 'الخدمات في',
-    'availableServices': 'الخدمات المتاحة',
-    'allServices': 'جميع الخدمات',
-    'browseAllServices': 'تصفح جميع خدماتنا المتاحة في المنطقة',
-    'searchServices': 'البحث في الخدمات...',
-    'allCategories': 'جميع الفئات',
-    'allCountries': 'جميع الدول',
-    'services': 'خدمة',
-    'startingFrom': 'تبدأ من',
-    'availableIn': 'متاح في',
-    'viewDetails': 'عرض التفاصيل',
-    'bookNow': 'احجز الآن',
-    'noServicesFound': 'لا توجد خدمات',
-    'tryDifferentSearch': 'حاول البحث بكلمات مختلفة',
-    'reliableServicesDescription': 'خدمات موثوقة ومتاحة على مدار الساعة في',
-    
-    // City Information
-    'cityInfo': 'معلومات المدينة',
-    'contactInfo': 'معلومات التواصل',
-    'region': 'المنطقة',
-    'population': 'عدد السكان',
-    'status': 'الحالة',
-    'capital': 'العاصمة',
-    'cityNotFound': 'المدينة غير موجودة',
-    
-    // Service Details
+    // City Page
+    'city.servicesIn': 'الخدمات في',
+    'city.reliableServices': 'خدمات موثوقة ومتاحة على مدار الساعة في',
+    'city.availableServices': 'الخدمات المتاحة',
+    'city.info': 'معلومات المدينة',
+    'city.contact': 'معلومات التواصل',
+    'city.region': 'المنطقة',
+    'city.population': 'عدد السكان',
+    'city.status': 'الحالة',
+    'city.capital': 'العاصمة',
+    'city.notFound': 'المدينة غير موجودة',
+
+    // Service Page
+    'service.notFound': 'الخدمة غير متوفرة',
+    'service.notAvailable': 'قد لا تكون الخدمة المطلوبة متوفرة في هذه المدينة، أو أن الرابط غير صحيح.',
+    'service.checkURL': 'يرجى التحقق من الرابط أو الانتقال من صفحتنا الرئيسية.',
+    'service.bestChoice': 'لماذا نحن الأفضل؟',
+    'service.related': 'خدمات ذات صلة في',
+
+    // Others
+    'loading': 'جاري التحميل...',
+    'whatsapp': 'واتساب',
     'emergency': 'طوارئ',
     'verified': 'موثق',
-    
-    // Testimonials
-    'testimonials.title': 'آراء عملائنا',
-    'testimonials.reviews': 'تقييم',
-    'testimonials.verified': 'موثق',
-    
-    // Common
-    'button.contact': 'اتصل الآن',
-    'button.whatsapp': 'واتساب',
-    'footer.rights': 'جميع الحقوق محفوظة',
-    'loading': 'جاري التحميل...',
-    'whatsapp': 'واتساب'
   },
   en: {
     // Navigation
     'nav.home': 'Home',
     'nav.about': 'About Us',
     'nav.contact': 'Contact Us',
+    'nav.services': 'Services',
+    'nav.countries': 'Countries',
+    'nav.saudi': 'Saudi Arabia',
+    'nav.uae': 'UAE',
+    'nav.kuwait': 'Kuwait',
+    'nav.egypt': 'Egypt',
     'nav.privacy': 'Privacy Policy',
     'nav.terms': 'Terms & Conditions',
-    'nav.faq': 'FAQ',
-    'nav.howItWorks': 'How It Works',
-    'nav.countries': 'Countries',
-    'nav.services': 'Services',
-    
-    // About Page
-    'about.title': 'About Our Company',
-    'about.description': 'We are a leading platform connecting customers with specialized local service providers in Saudi Arabia, UAE, Kuwait, and Egypt',
+
+    // Hero Section
+    'hero.title': 'Find Local Services',
+    'hero.subtitle': 'Across the Middle East',
+    'hero.description': 'Connect with verified local professionals in Saudi Arabia, UAE, Kuwait, and Egypt. Get instant quotes and reliable service for your home and business needs.',
+    'hero.call': 'Call Now: +966-XXX-XXXX',
+    'hero.support': '24/7 Support',
+
+    // Pages
+    'about.title': 'About LocalServices',
     'about.mission': 'Our Mission',
-    'about.missionText': 'We strive to provide reliable and fast services to our customers',
-    
-    // Contact Page
     'contact.title': 'Contact Us',
-    'contact.description': 'Get in touch with us for the best local services',
-    'contact.phone': 'Phone',
-    'contact.whatsapp': 'WhatsApp',
-    'contact.available': 'Available 24/7',
+    'services.title': 'All Services',
+    'services.description': 'Browse all our available services in the region.',
+    'terms.title': 'Terms & Conditions',
+    'privacy.title': 'Privacy Policy',
+    'notFound.title': 'Page Not Found',
+    'notFound.description': "The page you're looking for doesn't exist or has been moved.",
+
+    // Buttons & Common
+    'button.viewServices': 'View Services',
+    'button.viewDetails': 'View Details',
+    'button.bookNow': 'Book Now',
+    'button.goBack': 'Go Back',
+    'button.goHome': 'Go Home',
+    'language.toggle': 'عربي',
+
+    // City Page
+    'city.servicesIn': 'Services in',
+    'city.reliableServices': 'Reliable services available 24/7 in',
+    'city.availableServices': 'Available Services',
+    'city.info': 'City Information',
+    'city.contact': 'Contact Information',
+    'city.region': 'Region',
+    'city.population': 'Population',
+    'city.status': 'Status',
+    'city.capital': 'Capital',
+    'city.notFound': 'City not found',
     
-    // Services
-    'servicesIn': 'Services in',
-    'availableServices': 'Available Services',
-    'allServices': 'All Services',
-    'browseAllServices': 'Browse all our available services in the region',
-    'searchServices': 'Search services...',
-    'allCategories': 'All Categories',
-    'allCountries': 'All Countries',
-    'services': 'services',
-    'startingFrom': 'Starting from',
-    'availableIn': 'Available in',
-    'viewDetails': 'View Details',
-    'bookNow': 'Book Now',
-    'noServicesFound': 'No services found',
-    'tryDifferentSearch': 'Try searching with different keywords',
-    'reliableServicesDescription': 'Reliable services available 24/7 in',
-    
-    // City Information
-    'cityInfo': 'City Information',
-    'contactInfo': 'Contact Information',
-    'region': 'Region',
-    'population': 'Population',
-    'status': 'Status',
-    'capital': 'Capital',
-    'cityNotFound': 'City not found',
-    
-    // Service Details
+    // Service Page
+    'service.notFound': 'Service Not Available',
+    'service.notAvailable': 'The requested service may not be available in this city, or the URL is incorrect.',
+    'service.checkURL': 'Please check the URL or navigate from our homepage.',
+    'service.bestChoice': 'Why Choose Us?',
+    'service.related': 'Related Services in',
+
+    // Others
+    'loading': 'Loading...',
+    'whatsapp': 'WhatsApp',
     'emergency': 'Emergency',
     'verified': 'Verified',
-    
-    // Testimonials
-    'testimonials.title': 'Customer Reviews',
-    'testimonials.reviews': 'reviews',
-    'testimonials.verified': 'Verified',
-    
-    // Common
-    'button.contact': 'Call Now',
-    'button.whatsapp': 'WhatsApp',
-    'footer.rights': 'All rights reserved',
-    'loading': 'Loading...',
-    'whatsapp': 'WhatsApp'
   }
 };
 
@@ -161,7 +156,15 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const t = (key: string): string => {
-    return translations[language][key] || key;
+    const keys = key.split('.');
+    let result: any = translations[language];
+    for (const k of keys) {
+      result = result?.[k];
+      if (result === undefined) {
+        return key;
+      }
+    }
+    return result || key;
   };
 
   return (
