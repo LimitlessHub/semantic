@@ -1,4 +1,3 @@
-
 import { Star } from 'lucide-react';
 import ServiceIcon from '@/components/ServiceIcon';
 import { Service, City } from '@/types';
@@ -20,28 +19,30 @@ export default function ServiceHero({
 }: ServiceHeroProps) {
   return (
     <div>
-      <div className="flex items-center mb-6">
+      {/* FIX: Used flex and gap for proper icon-text spacing */}
+      <div className="flex items-center gap-x-4 mb-4">
         <ServiceIcon 
           iconName={service.icon} 
-          className="w-12 h-12 mr-4 text-blue-300" 
+          className="w-12 h-12 text-blue-300 flex-shrink-0" 
           size={48}
         />
-        <h1 className="text-4xl lg:text-5xl font-bold text-white">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white">
           {language === 'ar' ? service.nameAr : service.name} في {language === 'ar' ? city.nameAr : city.name}
         </h1>
       </div>
       
-      <p className="text-xl text-blue-100 mb-8">
+      <p className="text-lg md:text-xl text-blue-100 mb-6">
         {language === 'ar' ? service.descriptionAr : service.description} - خدمة احترافية متاحة على مدار الساعة
       </p>
 
-      <div className="flex items-center space-x-4 space-x-reverse mb-8">
-        <div className="flex items-center">
-          {[1, 2, 3, 4, 5].map((star) => (
+      {/* FIX: Used flex and gap for rating stars spacing */}
+      <div className="flex items-center gap-x-3 mb-8">
+        <div className="flex gap-x-1">
+          {[...Array(5)].map((_, i) => (
             <Star
-              key={star}
+              key={i}
               className={`w-5 h-5 ${
-                star <= averageRating ? 'text-yellow-400 fill-current' : 'text-gray-400'
+                i < Math.round(averageRating) ? 'text-yellow-400 fill-current' : 'text-gray-400'
               }`}
             />
           ))}
