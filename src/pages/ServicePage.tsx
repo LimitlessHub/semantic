@@ -16,7 +16,7 @@ import { getCountries, getServices, getCities } from '@/lib/cms';
 import { generateServicePageSEO } from '@/lib/seo';
 import { testimonials } from '@/lib/testimonials';
 import { Country, Service, City } from '@/types';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CustomTabs } from "@/components/CustomTabs"; // <-- استيراد المكون الجديد
 
 const ServicePage = () => {
   const { country: countrySlug, city: citySlug, service: serviceSlug } = useParams();
@@ -61,6 +61,18 @@ const ServicePage = () => {
   const seoData = generateServicePageSEO(currentService, currentCity, currentCountry, language);
   const averageRating = 4.8;
   const serviceImage = `/images/services/${currentService.slug}.jpg`;
+  
+  const pageTabs = [
+    { value: "overview", label: "نظرة عامة", content: (
+      <div className="text-start" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+        <h2 className="text-2xl font-bold text-white mb-4">وصف الخدمة</h2>
+        <p className="text-gray-300 whitespace-pre-line leading-relaxed">{(currentService as any).fullDescriptionAr || 'وصف الخدمة غير متوفر حاليًا.'}</p>
+        <ServiceFeatures />
+      </div>
+    )},
+    { value: "faq", label: "الأسئلة الشائعة", content: <ServiceFAQ serviceId={currentService.slug} /> },
+    { value: "coverage", label: "مناطق التغطية", content: <ServiceCoverage cityId={currentCity.id} /> },
+  ];
 
   return (
     <Layout>
@@ -73,22 +85,8 @@ const ServicePage = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
           <main className="lg:col-span-2">
-            <Tabs defaultValue="overview" className="w-full">
-              {/* FIX: Removed programmatic reversal. The new plugin will handle flex direction automatically */}
-              <TabsList className="flex w-full border-b border-white/10 rounded-none bg-transparent p-0">
-                  <TabsTrigger value="overview" className="flex-1 text-blue-300 data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:shadow-none border-b-2 border-transparent transition-colors duration-300">نظرة عامة</TabsTrigger>
-                  <TabsTrigger value="faq" className="flex-1 text-blue-300 data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:shadow-none border-b-2 border-transparent transition-colors duration-300">الأسئلة الشائعة</TabsTrigger>
-                  <TabsTrigger value="coverage" className="flex-1 text-blue-300 data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:shadow-none border-b-2 border-transparent transition-colors duration-300">مناطق التغطية</TabsTrigger>
-              </TabsList>
-              
-              {/* FIX: Using `text-start` which is now powered by the RTL plugin */}
-              <div className="mt-6 text-start">
-                <TabsContent value="overview"><h2 className="text-2xl font-bold text-white mb-4">وصف الخدمة</h2><p className="text-gray-300 whitespace-pre-line leading-relaxed">{(currentService as any).fullDescriptionAr || 'وصف الخدمة غير متوفر حاليًا.'}</p></TabsContent>
-                <TabsContent value="faq"><ServiceFAQ serviceId={currentService.slug} /></TabsContent>
-                <TabsContent value="coverage"><ServiceCoverage cityId={currentCity.id} /></TabsContent>
-              </div>
-            </Tabs>
-            <ServiceFeatures />
+            {/* Using the new CustomTabs component */}
+            <CustomTabs tabs={pageTabs} defaultValue="overview" />
           </main>
           <aside className="lg:sticky lg:top-24 space-y-8" id="service-form">
             <AvailabilityStatus serviceId={currentService.id} cityId={currentCity.slug} />
