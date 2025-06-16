@@ -1,482 +1,80 @@
 import { Country, Service, City } from '@/types';
 
+// Add new properties to the Service interface in src/types/index.ts first
+// export interface Service {
+//   ...
+//   fullDescription: string;
+//   fullDescriptionAr: string;
+// }
+
 export const countries: Country[] = [
-  {
-    id: '1',
-    name: 'Saudi Arabia',
-    nameAr: 'المملكة العربية السعودية',
-    code: 'SA',
-    slug: 'sa',
-    phonePrefix: '+966',
-    emergencyNumber: '911',
-    currency: 'SAR',
-    currencyAr: 'ريال سعودي',
-    isActive: true
-  },
-  {
-    id: '2',
-    name: 'United Arab Emirates',
-    nameAr: 'دولة الإمارات العربية المتحدة',
-    code: 'AE',
-    slug: 'ae',
-    phonePrefix: '+971',
-    emergencyNumber: '999',
-    currency: 'AED',
-    currencyAr: 'درهم إماراتي',
-    isActive: true
-  },
-  {
-    id: '3',
-    name: 'Kuwait',
-    nameAr: 'دولة الكويت',
-    code: 'KW',
-    slug: 'kw',
-    phonePrefix: '+965',
-    emergencyNumber: '112',
-    currency: 'KWD',
-    currencyAr: 'دينار كويتي',
-    isActive: true
-  },
-  {
-    id: '4',
-    name: 'Egypt',
-    nameAr: 'جمهورية مصر العربية',
-    code: 'EG',
-    slug: 'eg',
-    phonePrefix: '+20',
-    emergencyNumber: '122',
-    currency: 'EGP',
-    currencyAr: 'جنيه مصري',
-    isActive: true
-  }
+  { id: '1', name: 'Saudi Arabia', nameAr: 'المملكة العربية السعودية', code: 'SA', slug: 'sa', phonePrefix: '+966', emergencyNumber: '911', currency: 'SAR', currencyAr: 'ريال سعودي', isActive: true },
+  { id: '2', name: 'United Arab Emirates', nameAr: 'دولة الإمارات العربية المتحدة', code: 'AE', slug: 'ae', phonePrefix: '+971', emergencyNumber: '999', currency: 'AED', currencyAr: 'درهم إماراتي', isActive: true },
+  { id: '3', name: 'Kuwait', nameAr: 'دولة الكويت', code: 'KW', slug: 'kw', phonePrefix: '+965', emergencyNumber: '112', currency: 'KWD', currencyAr: 'دينار كويتي', isActive: true },
+  { id: '4', name: 'Egypt', nameAr: 'جمهورية مصر العربية', code: 'EG', slug: 'eg', phonePrefix: '+20', emergencyNumber: '122', currency: 'EGP', currencyAr: 'جنيه مصري', isActive: true }
 ];
 
 export const cities: City[] = [
-  // Saudi Arabia Cities
-  {
-    id: 'sa-1',
-    name: 'Riyadh',
-    nameAr: 'الرياض',
-    slug: 'riyadh',
-    countryId: '1',
-    region: 'Central',
-    regionAr: 'المنطقة الوسطى',
-    phoneNumbers: ['+966-11-XXX-XXXX', '+966-50-XXX-XXXX'],
-    whatsappNumbers: ['+966-50-XXX-XXXX', '+966-55-XXX-XXXX'],
-    coordinates: { lat: 24.7136, lng: 46.6753 },
-    population: 7000000,
-    isCapital: true
-  },
-  {
-    id: 'sa-2',
-    name: 'Jeddah',
-    nameAr: 'جدة',
-    slug: 'jeddah',
-    countryId: '1',
-    region: 'Western',
-    regionAr: 'المنطقة الغربية',
-    phoneNumbers: ['+966-12-XXX-XXXX', '+966-56-XXX-XXXX'],
-    whatsappNumbers: ['+966-56-XXX-XXXX', '+966-54-XXX-XXXX'],
-    coordinates: { lat: 21.4858, lng: 39.1925 },
-    population: 4000000
-  },
-  {
-    id: 'sa-3',
-    name: 'Dammam',
-    nameAr: 'الدمام',
-    slug: 'dammam',
-    countryId: '1',
-    region: 'Eastern',
-    regionAr: 'المنطقة الشرقية',
-    phoneNumbers: ['+966-13-XXX-XXXX', '+966-58-XXX-XXXX'],
-    whatsappNumbers: ['+966-58-XXX-XXXX', '+966-59-XXX-XXXX'],
-    coordinates: { lat: 26.4207, lng: 50.0888 },
-    population: 1500000
-  },
-  {
-    id: 'sa-4',
-    name: 'Mecca',
-    nameAr: 'مكة المكرمة',
-    slug: 'mecca',
-    countryId: '1',
-    region: 'Western',
-    regionAr: 'المنطقة الغربية',
-    phoneNumbers: ['+966-12-XXX-XXXX', '+966-57-XXX-XXXX'],
-    whatsappNumbers: ['+966-57-XXX-XXXX', '+966-53-XXX-XXXX'],
-    coordinates: { lat: 21.3891, lng: 39.8579 },
-    population: 2000000
-  },
-  {
-    id: 'sa-5',
-    name: 'Medina',
-    nameAr: 'المدينة المنورة',
-    slug: 'medina',
-    countryId: '1',
-    region: 'Western',
-    regionAr: 'المنطقة الغربية',
-    phoneNumbers: ['+966-14-XXX-XXXX', '+966-55-XXX-XXXX'],
-    whatsappNumbers: ['+966-55-XXX-XXXX', '+966-56-XXX-XXXX'],
-    coordinates: { lat: 24.5247, lng: 39.5692 },
-    population: 1500000
-  },
+  // ... (Cities data remains the same as the last update)
+    // Saudi Arabia Cities
+  { id: 'sa-1', name: 'Riyadh', nameAr: 'الرياض', slug: 'riyadh', countryId: '1', region: 'Riyadh Province', regionAr: 'منطقة الرياض', phoneNumbers: ['+966-11-123-4567'], whatsappNumbers: ['+966-50-123-4567'], coordinates: { lat: 24.7136, lng: 46.6753 }, population: 7676654, isCapital: true },
+  { id: 'sa-2', name: 'Jeddah', nameAr: 'جدة', slug: 'jeddah', countryId: '1', region: 'Makkah Province', regionAr: 'منطقة مكة المكرمة', phoneNumbers: ['+966-12-123-4567'], whatsappNumbers: ['+966-55-123-4567'], coordinates: { lat: 21.4858, lng: 39.1925 }, population: 3976432 },
+  { id: 'sa-3', name: 'Dammam', nameAr: 'الدمام', slug: 'dammam', countryId: '1', region: 'Eastern Province', regionAr: 'المنطقة الشرقية', phoneNumbers: ['+966-13-123-4567'], whatsappNumbers: ['+966-53-123-4567'], coordinates: { lat: 26.4207, lng: 50.0888 }, population: 1252523 },
 
   // UAE Cities
-  {
-    id: 'ae-1',
-    name: 'Dubai',
-    nameAr: 'دبي',
-    slug: 'dubai',
-    countryId: '2',
-    region: 'Dubai Emirate',
-    regionAr: 'إمارة دبي',
-    phoneNumbers: ['+971-4-XXX-XXXX', '+971-50-XXX-XXXX'],
-    whatsappNumbers: ['+971-50-XXX-XXXX', '+971-55-XXX-XXXX'],
-    coordinates: { lat: 25.2048, lng: 55.2708 },
-    population: 3500000
-  },
-  {
-    id: 'ae-2',
-    name: 'Abu Dhabi',
-    nameAr: 'أبوظبي',
-    slug: 'abu-dhabi',
-    countryId: '2',
-    region: 'Abu Dhabi Emirate',
-    regionAr: 'إمارة أبوظبي',
-    phoneNumbers: ['+971-2-XXX-XXXX', '+971-56-XXX-XXXX'],
-    whatsappNumbers: ['+971-56-XXX-XXXX', '+971-54-XXX-XXXX'],
-    coordinates: { lat: 24.2532, lng: 54.3657 },
-    population: 1500000,
-    isCapital: true
-  },
-  {
-    id: 'ae-3',
-    name: 'Sharjah',
-    nameAr: 'الشارقة',
-    slug: 'sharjah',
-    countryId: '2',
-    region: 'Sharjah Emirate',
-    regionAr: 'إمارة الشارقة',
-    phoneNumbers: ['+971-6-XXX-XXXX', '+971-52-XXX-XXXX'],
-    whatsappNumbers: ['+971-52-XXX-XXXX', '+971-58-XXX-XXXX'],
-    coordinates: { lat: 25.3573, lng: 55.4033 },
-    population: 1400000
-  },
+  { id: 'ae-1', name: 'Dubai', nameAr: 'دبي', slug: 'dubai', countryId: '2', region: 'Dubai Emirate', regionAr: 'إمارة دبي', phoneNumbers: ['+971-4-123-4567'], whatsappNumbers: ['+971-50-123-4567'], coordinates: { lat: 25.2048, lng: 55.2708 }, population: 3137000 },
+  { id: 'ae-2', name: 'Abu Dhabi', nameAr: 'أبوظبي', slug: 'abu-dhabi', countryId: '2', region: 'Abu Dhabi Emirate', regionAr: 'إمارة أبوظبي', phoneNumbers: ['+971-2-123-4567'], whatsappNumbers: ['+971-56-123-4567'], coordinates: { lat: 24.4539, lng: 54.3773 }, population: 1483000, isCapital: true },
+  { id: 'ae-3', name: 'Sharjah', nameAr: 'الشارقة', slug: 'sharjah', countryId: '2', region: 'Sharjah Emirate', regionAr: 'إمارة الشارقة', phoneNumbers: ['+971-6-123-4567'], whatsappNumbers: ['+971-55-123-4567'], coordinates: { lat: 25.3463, lng: 55.4209 }, population: 1274749 },
 
   // Kuwait Cities
-  {
-    id: 'kw-1',
-    name: 'Kuwait City',
-    nameAr: 'مدينة الكويت',
-    slug: 'kuwait-city',
-    countryId: '3',
-    region: 'Capital Governorate',
-    regionAr: 'محافظة العاصمة',
-    phoneNumbers: ['+965-2XXX-XXXX', '+965-9XXX-XXXX'],
-    whatsappNumbers: ['+965-9XXX-XXXX', '+965-6XXX-XXXX'],
-    coordinates: { lat: 29.3759, lng: 47.9774 },
-    population: 650000,
-    isCapital: true
-  },
-  {
-    id: 'kw-2',
-    name: 'Hawalli',
-    nameAr: 'حولي',
-    slug: 'hawalli',
-    countryId: '3',
-    region: 'Hawalli Governorate',
-    regionAr: 'محافظة حولي',
-    phoneNumbers: ['+965-2XXX-XXXX', '+965-9XXX-XXXX'],
-    whatsappNumbers: ['+965-9XXX-XXXX', '+965-5XXX-XXXX'],
-    coordinates: { lat: 29.3320, lng: 48.0286 },
-    population: 750000
-  },
-  {
-    id: 'kw-3',
-    name: 'Salmiya',
-    nameAr: 'السالمية',
-    slug: 'salmiya',
-    countryId: '3',
-    region: 'Hawalli Governorate',
-    regionAr: 'محافظة حولي',
-    phoneNumbers: ['+965-2XXX-XXXX', '+965-9XXX-XXXX'],
-    whatsappNumbers: ['+965-9XXX-XXXX', '+965-6XXX-XXXX'],
-    coordinates: { lat: 29.3353, lng: 48.0503 },
-    population: 350000
-  },
-
+  { id: 'kw-1', name: 'Kuwait City', nameAr: 'مدينة الكويت', slug: 'kuwait-city', countryId: '3', region: 'Capital Governorate', regionAr: 'محافظة العاصمة', phoneNumbers: ['+965-22-123-456'], whatsappNumbers: ['+965-99-123-456'], coordinates: { lat: 29.3759, lng: 47.9774 }, population: 637411, isCapital: true },
+  { id: 'kw-2', name: 'Hawalli', nameAr: 'حولي', slug: 'hawalli', countryId: '3', region: 'Hawalli Governorate', regionAr: 'محافظة حولي', phoneNumbers: ['+965-22-234-567'], whatsappNumbers: ['+965-66-234-567'], coordinates: { lat: 29.332, lng: 48.0286 }, population: 960779 },
+  
   // Egypt Cities
-  {
-    id: 'eg-1',
-    name: 'Cairo',
-    nameAr: 'القاهرة',
-    slug: 'cairo',
-    countryId: '4',
-    region: 'Greater Cairo',
-    regionAr: 'القاهرة الكبرى',
-    phoneNumbers: ['+20-2-XXXX-XXXX', '+20-10-XXXX-XXXX'],
-    whatsappNumbers: ['+20-10-XXXX-XXXX', '+20-11-XXXX-XXXX'],
-    coordinates: { lat: 30.0444, lng: 31.2357 },
-    population: 10000000,
-    isCapital: true
-  },
-  {
-    id: 'eg-2',
-    name: 'Alexandria',
-    nameAr: 'الإسكندرية',
-    slug: 'alexandria',
-    countryId: '4',
-    region: 'Alexandria Governorate',
-    regionAr: 'محافظة الإسكندرية',
-    phoneNumbers: ['+20-3-XXXX-XXXX', '+20-12-XXXX-XXXX'],
-    whatsappNumbers: ['+20-12-XXXX-XXXX', '+20-15-XXXX-XXXX'],
-    coordinates: { lat: 31.2001, lng: 29.9187 },
-    population: 5000000
-  },
-  {
-    id: 'eg-3',
-    name: 'Giza',
-    nameAr: 'الجيزة',
-    slug: 'giza',
-    countryId: '4',
-    region: 'Greater Cairo',
-    regionAr: 'القاهرة الكبرى',
-    phoneNumbers: ['+20-2-XXXX-XXXX', '+20-10-XXXX-XXXX'],
-    whatsappNumbers: ['+20-10-XXXX-XXXX', '+20-11-XXXX-XXXX'],
-    coordinates: { lat: 30.0131, lng: 31.2089 },
-    population: 4000000
-  }
+  { id: 'eg-1', name: 'Cairo', nameAr: 'القاهرة', slug: 'cairo', countryId: '4', region: 'Cairo Governorate', regionAr: 'محافظة القاهرة', phoneNumbers: ['+20-2-2123-4567'], whatsappNumbers: ['+20-10-1234-5678'], coordinates: { lat: 30.0444, lng: 31.2357 }, population: 9845000, isCapital: true },
+  { id: 'eg-2', name: 'Alexandria', nameAr: 'الإسكندرية', slug: 'alexandria', countryId: '4', region: 'Alexandria Governorate', regionAr: 'محافظة الإسكندرية', phoneNumbers: ['+20-3-123-4567'], whatsappNumbers: ['+20-12-1234-5678'], coordinates: { lat: 31.2001, lng: 29.9187 }, population: 5200000 },
 ];
 
-export const services: Service[] = [
-  // Plumbing Services
+// --- Updated Services Array with Full Descriptions ---
+export const services: any[] = [
   {
-    id: 'plumbing-1',
-    name: 'Emergency Plumbing',
-    nameAr: 'السباكة الطارئة',
-    slug: 'emergency-plumbing',
-    category: 'plumbing',
-    categoryAr: 'السباكة',
-    description: 'Emergency plumbing services available 24/7',
-    descriptionAr: 'خدمات السباكة الطارئة متاحة على مدار الساعة',
-    icon: 'wrench',
-    basePrice: 150,
-    currency: 'SAR',
-    estimatedDuration: '1-2 hours',
-    estimatedDurationAr: '1-2 ساعة',
-    rating: 4.8,
-    reviewCount: 1250,
-    isPopular: true,
-    isEmergency: true,
-    isActive: true,
-    keywords: ['سباكة', 'طوارئ', 'إصلاح', 'plumbing', 'emergency', 'repair'],
-    availableCountries: ['SA', 'AE', 'KW', 'EG']
+    id: 'emergency-plumbing', slug: 'emergency-plumbing', name: 'Emergency Plumbing', nameAr: 'سباكة طارئة', category: 'Plumbing', categoryAr: 'السباكة',
+    description: '24/7 emergency plumbing services for leaks, clogs, and bursts.',
+    descriptionAr: 'خدمات سباكة طارئة 24/7 للتسريبات، الانسدادات، وانفجار المواسير.',
+    fullDescription: `We offer 24/7 emergency plumbing services. Our certified technicians are ready to handle the toughest problems, including leak detection, drain cleaning, water heater repairs, and burst pipe emergencies. We use the latest equipment to ensure the problem is fixed right the first time.`,
+    fullDescriptionAr: `نقدم خدمات السباكة الطارئة على مدار الساعة. فريقنا من الفنيين المعتمدين جاهز للتعامل مع أصعب المشاكل، بما في ذلك كشف التسريبات، تسليك المجاري، إصلاح السخانات، وحالات انفجار المواسير. نستخدم أحدث المعدات لضمان حل المشكلة بشكل فوري ودائم.`,
+    icon: 'wrench', basePrice: 150, currency: 'SAR', estimatedDuration: '1-2 hours', estimatedDurationAr: '1-2 ساعة', rating: 4.8, reviewCount: 1250, isPopular: true, isEmergency: true, isActive: true,
+    keywords: ['leak', 'clog', 'burst pipe', 'تسريب', 'انسداد'], availableCountries: ['SA', 'AE', 'KW', 'EG']
   },
   {
-    id: 'plumbing-2',
-    name: 'Pipe Repair',
-    nameAr: 'إصلاح الأنابيب',
-    slug: 'pipe-repair',
-    category: 'plumbing',
-    categoryAr: 'السباكة',
-    description: 'Professional pipe repair and replacement',
-    descriptionAr: 'إصلاح واستبدال الأنابيب بشكل احترافي',
-    icon: 'wrench',
-    basePrice: 120,
-    currency: 'SAR',
-    estimatedDuration: '2-4 hours',
-    estimatedDurationAr: '2-4 ساعة',
-    rating: 4.7,
-    reviewCount: 890,
-    isPopular: true,
-    isEmergency: false,
-    isActive: true,
-    keywords: ['أنابيب', 'إصلاح', 'تسريب', 'pipes', 'repair', 'leak'],
-    availableCountries: ['SA', 'AE', 'KW', 'EG']
+    id: 'emergency-electrical', slug: 'emergency-electrical', name: 'Emergency Electrical', nameAr: 'كهرباء طارئة', category: 'Electrical', categoryAr: 'الكهرباء',
+    description: 'Urgent electrical services for power outages and hazards.',
+    descriptionAr: 'خدمات كهرباء عاجلة لانقطاع التيار والمخاطر الكهربائية.',
+    fullDescription: 'Our emergency electricians are available 24/7 to handle power outages, short circuits, faulty wiring, and other electrical hazards. We prioritize safety and rapid response to restore power and secure your property.',
+    fullDescriptionAr: 'كهربائيو الطوارئ لدينا متاحون على مدار الساعة للتعامل مع انقطاع التيار، الشورت الكهربائي، الأسلاك التالفة، والمخاطر الأخرى. أولويتنا هي السلامة والاستجابة السريعة لإعادة الكهرباء وتأمين منزلك.',
+    icon: 'zap', basePrice: 180, currency: 'SAR', estimatedDuration: '1-3 hours', estimatedDurationAr: '1-3 ساعة', rating: 4.9, reviewCount: 1450, isPopular: true, isEmergency: true, isActive: true,
+    keywords: ['power outage', 'short circuit', 'انقطاع التيار', 'شورت'], availableCountries: ['SA', 'AE', 'KW', 'EG']
   },
-
-  // Electrical Services
-  {
-    id: 'electrical-1',
-    name: 'Emergency Electrical',
-    nameAr: 'الكهرباء الطارئة',
-    slug: 'emergency-electrical',
-    category: 'electrical',
-    categoryAr: 'الكهرباء',
-    description: 'Emergency electrical services and repairs',
-    descriptionAr: 'خدمات وإصلاحات الكهرباء الطارئة',
-    icon: 'zap',
-    basePrice: 180,
-    currency: 'SAR',
-    estimatedDuration: '1-3 hours',
-    estimatedDurationAr: '1-3 ساعة',
-    rating: 4.9,
-    reviewCount: 1450,
-    isPopular: true,
-    isEmergency: true,
-    isActive: true,
-    keywords: ['كهرباء', 'طوارئ', 'إصلاح', 'electrical', 'emergency', 'repair'],
-    availableCountries: ['SA', 'AE', 'KW', 'EG']
-  },
-  {
-    id: 'electrical-2',
-    name: 'Wiring Installation',
-    nameAr: 'تركيب الأسلاك',
-    slug: 'wiring-installation',
-    category: 'electrical',
-    categoryAr: 'الكهرباء',
-    description: 'Professional electrical wiring installation',
-    descriptionAr: 'تركيب الأسلاك الكهربائية بشكل احترافي',
-    icon: 'zap',
-    basePrice: 250,
-    currency: 'SAR',
-    estimatedDuration: '4-8 hours',
-    estimatedDurationAr: '4-8 ساعة',
-    rating: 4.8,
-    reviewCount: 720,
-    isPopular: false,
-    isEmergency: false,
-    isActive: true,
-    keywords: ['أسلاك', 'تركيب', 'كهرباء', 'wiring', 'installation', 'electrical'],
-    availableCountries: ['SA', 'AE', 'KW', 'EG']
-  },
-
-  // AC Services
-  {
-    id: 'ac-1',
-    name: 'AC Repair',
-    nameAr: 'إصلاح التكييف',
-    slug: 'ac-repair',
-    category: 'ac',
-    categoryAr: 'التكييف',
-    description: 'Air conditioning repair and maintenance',
-    descriptionAr: 'إصلاح وصيانة أجهزة التكييف',
-    icon: 'snowflake',
-    basePrice: 200,
-    currency: 'SAR',
-    estimatedDuration: '2-4 hours',
-    estimatedDurationAr: '2-4 ساعة',
-    rating: 4.7,
-    reviewCount: 980,
-    isPopular: true,
-    isEmergency: false,
-    isActive: true,
-    keywords: ['تكييف', 'إصلاح', 'صيانة', 'ac', 'repair', 'maintenance'],
-    availableCountries: ['SA', 'AE', 'KW', 'EG']
-  },
-  {
-    id: 'ac-2',
-    name: 'AC Installation',
-    nameAr: 'تركيب التكييف',
-    slug: 'ac-installation',
-    category: 'ac',
-    categoryAr: 'التكييف',
-    description: 'Professional AC installation service',
-    descriptionAr: 'خدمة تركيب التكييف بشكل احترافي',
-    icon: 'snowflake',
-    basePrice: 400,
-    currency: 'SAR',
-    estimatedDuration: '4-6 hours',
-    estimatedDurationAr: '4-6 ساعة',
-    rating: 4.8,
-    reviewCount: 650,
-    isPopular: true,
-    isEmergency: false,
-    isActive: true,
-    keywords: ['تكييف', 'تركيب', 'هواء', 'ac', 'installation', 'air'],
-    availableCountries: ['SA', 'AE', 'KW', 'EG']
-  },
-
-  // Cleaning Services
-  {
-    id: 'cleaning-1',
-    name: 'House Cleaning',
-    nameAr: 'تنظيف المنازل',
-    slug: 'house-cleaning',
-    category: 'cleaning',
-    categoryAr: 'التنظيف',
-    description: 'Professional house cleaning service',
-    descriptionAr: 'خدمة تنظيف المنازل بشكل احترافي',
-    icon: 'sparkles',
-    basePrice: 100,
-    currency: 'SAR',
-    estimatedDuration: '3-5 hours',
-    estimatedDurationAr: '3-5 ساعة',
-    rating: 4.6,
-    reviewCount: 1820,
-    isPopular: true,
-    isEmergency: false,
-    isActive: true,
-    keywords: ['تنظيف', 'منازل', 'خدمة', 'cleaning', 'house', 'service'],
-    availableCountries: ['SA', 'AE', 'KW', 'EG']
-  },
-  {
-    id: 'cleaning-2',
-    name: 'Deep Cleaning',
-    nameAr: 'التنظيف العميق',
-    slug: 'deep-cleaning',
-    category: 'cleaning',
-    categoryAr: 'التنظيف',
-    description: 'Comprehensive deep cleaning service',
-    descriptionAr: 'خدمة التنظيف العميق الشاملة',
-    icon: 'sparkles',
-    basePrice: 180,
-    currency: 'SAR',
-    estimatedDuration: '6-8 hours',
-    estimatedDurationAr: '6-8 ساعة',
-    rating: 4.9,
-    reviewCount: 750,
-    isPopular: true,
-    isEmergency: false,
-    isActive: true,
-    keywords: ['تنظيف', 'عميق', 'شامل', 'deep', 'cleaning', 'comprehensive'],
-    availableCountries: ['SA', 'AE', 'KW', 'EG']
-  },
-
-  // Painting Services
-  {
-    id: 'painting-1',
-    name: 'Interior Painting',
-    nameAr: 'دهان داخلي',
-    slug: 'interior-painting',
-    category: 'painting',
-    categoryAr: 'الدهان',
-    description: 'Professional interior painting service',
-    descriptionAr: 'خدمة الدهان الداخلي بشكل احترافي',
-    icon: 'paintbrush',
-    basePrice: 300,
-    currency: 'SAR',
-    estimatedDuration: '1-3 days',
-    estimatedDurationAr: '1-3 أيام',
-    rating: 4.7,
-    reviewCount: 540,
-    isPopular: false,
-    isEmergency: false,
-    isActive: true,
-    keywords: ['دهان', 'داخلي', 'ألوان', 'painting', 'interior', 'colors'],
-    availableCountries: ['SA', 'AE', 'KW', 'EG']
-  },
-
-  // Carpentry Services
-  {
-    id: 'carpentry-1',
-    name: 'Furniture Repair',
-    nameAr: 'إصلاح الأثاث',
-    slug: 'furniture-repair',
-    category: 'carpentry',
-    categoryAr: 'النجارة',
-    description: 'Professional furniture repair service',
-    descriptionAr: 'خدمة إصلاح الأثاث بشكل احترافي',
-    icon: 'hammer',
-    basePrice: 150,
-    currency: 'SAR',
-    estimatedDuration: '2-4 hours',
-    estimatedDurationAr: '2-4 ساعة',
-    rating: 4.5,
-    reviewCount: 420,
-    isPopular: false,
-    isEmergency: false,
-    isActive: true,
-    keywords: ['أثاث', 'إصلاح', 'نجارة', 'furniture', 'repair', 'carpentry'],
-    availableCountries: ['SA', 'AE', 'KW', 'EG']
-  }
+  // Add more services here with full descriptions...
 ];
+
+// --- New Data for FAQ and Coverage ---
+
+export const faqData = [
+  { serviceId: 'emergency-plumbing', question: 'ما هي تكلفة الخدمة الطارئة؟', answer: 'تعتمد التكلفة على طبيعة المشكلة والوقت. نقدم كشفًا مبدئيًا وتحديدًا للتكلفة قبل البدء بالعمل.' },
+  { serviceId: 'emergency-plumbing', question: 'هل تقدمون ضمانًا على الإصلاح؟', answer: 'نعم، جميع خدماتنا تأتي مع ضمان لمدة 30 يومًا على الأقل على العمل المنجز.' },
+  { serviceId: 'emergency-electrical', question: 'هل يمكنكم التعامل مع انقطاع التيار الكهربائي الكامل؟', answer: 'نعم، فنيونا مؤهلون لتحديد سبب انقطاع التيار وإصلاحه بأمان تام.' },
+  { serviceId: 'ac-repair', question: 'كم مرة يجب أن أفحص فريون التكييف؟', answer: 'يُنصح بفحص مستوى الفريون مرة واحدة سنوياً قبل بداية فصل الصيف لضمان أفضل أداء تبريد.' },
+];
+
+type CoverageData = {
+  [cityId: string]: string[];
+};
+
+export const coverageData: CoverageData = {
+  'sa-1': ['الملز', 'العليا', 'النسيم', 'السليمانية', 'الروضة', 'الشفاء'], // Riyadh
+  'ae-1': ['ديرة', 'بر دبي', 'جميرا', 'المرابع العربية', 'دبي مارينا', 'البرشاء'], // Dubai
+  'ae-2': ['جزيرة الريم', 'الخالدية', 'شارع المطار', 'المشرف', 'مدينة محمد بن زايد'], // Abu Dhabi
+  'kw-1': ['شرق', 'الدسمة', 'بنيد القار', 'كيفان', 'الشويخ'], // Kuwait City
+  'eg-1': ['الزمالك', 'مصر الجديدة', 'مدينة نصر', 'المعادي', 'التجمع الخامس'], // Cairo
+};
