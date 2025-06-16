@@ -19,7 +19,7 @@ export default function ServiceHero({
 }: ServiceHeroProps) {
   return (
     <div>
-      {/* FIX: Used flex and gap for proper icon-text spacing */}
+      {/* FIX: Using flex and gap for proper icon-text spacing */}
       <div className="flex items-center gap-x-4 mb-4">
         <ServiceIcon 
           iconName={service.icon} 
@@ -37,7 +37,7 @@ export default function ServiceHero({
 
       {/* FIX: Used flex and gap for rating stars spacing */}
       <div className="flex items-center gap-x-3 mb-8">
-        <div className="flex gap-x-1">
+        <div className="flex items-center gap-x-1">
           {[...Array(5)].map((_, i) => (
             <Star
               key={i}
