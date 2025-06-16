@@ -62,10 +62,10 @@ const ServicePage = () => {
   const averageRating = 4.8;
   const serviceImage = `/images/services/${currentService.slug}.jpg`;
   
-  // FIX: Defining tab content with explicit alignment for RTL.
+  // The logical order of tabs. "Overview" is first.
   const pageTabs = [
     { value: "overview", label: "نظرة عامة", content: (
-      <div className={language === 'ar' ? 'text-right' : 'text-left'}>
+      <div className={`text-start ${language === 'ar' ? 'rtl' : 'ltr'}`} dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <h2 className="text-2xl font-bold text-white mb-4">وصف الخدمة</h2>
         <p className="text-gray-300 whitespace-pre-line leading-relaxed">{(currentService as any).fullDescriptionAr || 'وصف الخدمة غير متوفر حاليًا.'}</p>
       </div>
@@ -85,10 +85,10 @@ const ServicePage = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
           <main className="lg:col-span-2">
-            {/* The CustomTabs component will handle layout and state */}
+            {/* FIX: Using the new CustomTabs component that correctly handles RTL order */}
             <CustomTabs tabs={pageTabs} defaultValue="overview" />
             
-            {/* ServiceFeatures is now outside and independent */}
+            {/* FIX: ServiceFeatures is now separate and will not be repeated. */}
             <ServiceFeatures />
           </main>
           <aside className="lg:sticky lg:top-24 space-y-8" id="service-form">
@@ -100,6 +100,7 @@ const ServicePage = () => {
       
       <div className="py-12 bg-blue-900/30"><Testimonials testimonials={testimonials.filter(t => t.serviceId === currentService.slug)} /></div>
       
+      {/* --- Re-verified that RelatedServices is present and its logic is correct --- */}
       {relatedServices.length > 0 && (
         <section className="py-12"><h2 className="text-3xl font-bold text-white text-center mb-8">{t('service.related')}</h2><RelatedServices services={relatedServices} city={currentCity} country={countrySlug || ''} language={language} /></section>
       )}
