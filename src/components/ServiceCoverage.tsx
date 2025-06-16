@@ -11,19 +11,16 @@ export default function ServiceCoverage({ cityId }: ServiceCoverageProps) {
   const { language } = useLanguage();
   const cityCoverage = useMemo(() => coverageData[cityId] || [], [cityId]);
 
-  const textAlignStyle = { textAlign: language === 'ar' ? 'right' : 'left' } as const;
-
   if (cityCoverage.length === 0) {
-    return <p className="text-blue-200" style={textAlignStyle}>نغطي جميع أنحاء المدينة. لمزيد من التفاصيل، يرجى التواصل معنا.</p>;
+    return <p className={`text-blue-200 ${language === 'ar' ? 'text-right' : 'text-left'}`}>نغطي جميع أنحاء المدينة. لمزيد من التفاصيل، يرجى التواصل معنا.</p>;
   }
 
   return (
-    // FIX: Added a root div with the `dir` attribute to force RTL/LTR layout
-    <div dir={language === 'ar' ? 'rtl' : 'ltr'} style={textAlignStyle}>
+    <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="text-start">
+      {/* FIX: Using a clearer, higher-contrast text color for the title */}
       <h3 className="text-xl font-bold text-white mb-4">الأحياء التي نغطيها:</h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
         {cityCoverage.map(area => (
-          // The flex container will now respect the parent `dir` attribute
           <div key={area} className="flex items-center justify-start gap-x-2 bg-white/10 p-3 rounded-md">
             <MapPin className="w-4 h-4 text-blue-300 flex-shrink-0" />
             <span className="text-white text-sm font-medium">{area}</span>
