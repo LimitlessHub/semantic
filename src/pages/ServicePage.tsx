@@ -5,7 +5,6 @@ import Testimonials from '@/components/Testimonials';
 import SEOHead from '@/components/SEOHead';
 import AvailabilityStatus from '@/components/AvailabilityStatus';
 import UrgentServiceIndicator from '@/components/UrgentServiceIndicator';
-import ServiceBreadcrumb from '@/components/ServiceBreadcrumb';
 import ServiceFormSection from '@/components/ServiceFormSection';
 import RelatedServices from '@/components/RelatedServices';
 import ServiceHero from '@/components/ServiceHero';
@@ -64,52 +63,38 @@ const ServicePage = () => {
   const averageRating = cityTestimonials.length > 0 ? cityTestimonials.reduce((sum, t) => sum + t.rating, 0) / cityTestimonials.length : 4.8;
   const serviceImage = `/images/services/${currentService.slug}.jpg`;
 
-  // --- FIX: Programmatically define and order tabs for perfect RTL control ---
   const pageTabs = [
     { value: "overview", label: "نظرة عامة" },
     { value: "faq", label: "الأسئلة الشائعة" },
     { value: "coverage", label: "مناطق التغطية" },
   ];
-  // Reverse the array for RTL languages
-  if (language === 'ar') {
-    pageTabs.reverse();
-  }
+  if (language === 'ar') { pageTabs.reverse(); }
 
   return (
     <Layout>
       <SEOHead seoData={seoData} language={language} />
       
-      <div className="container mx-auto px-4 pt-8">
-        {/* FIX 1: UrgentServiceIndicator is back and will show when needed. */}
-        {currentService.isEmergency && (
-          <div className="mb-8">
-            <UrgentServiceIndicator
-              onUrgentRequest={handleUrgentRequest}
-              serviceType={language === 'ar' ? currentService.nameAr : currentService.name}
-              isAvailable={true}
-            />
-          </div>
-        )}
-        
-        <ServiceHero service={currentService} city={currentCity} country={currentCountry} language={language} averageRating={averageRating} reviewCount={cityTestimonials.length} serviceImage={serviceImage}/>
-      </div>
+      {currentService.isEmergency && (
+        <div className="container mx-auto px-4 pt-8"><UrgentServiceIndicator onUrgentRequest={handleUrgentRequest} serviceType={language === 'ar' ? currentService.nameAr : currentService.name} isAvailable={true} /></div>
+      )}
+      
+      <div className="container mx-auto px-4 pt-8"><ServiceHero service={currentService} city={currentCity} country={currentCountry} language={language} averageRating={averageRating} reviewCount={cityTestimonials.length} serviceImage={serviceImage}/></div>
 
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
           <main className="lg:col-span-2">
-            <Tabs defaultValue="overview" className="w-full">
+            <Tabs defaultValue={language === 'ar' ? 'coverage' : 'overview'} className="w-full">
+              {/* FIX: Using programmatic reversal for tabs to ensure correct RTL layout */}
               <TabsList className="flex w-full border-b border-white/20 rounded-none bg-transparent p-0">
-                {/* Render tabs from the ordered array */}
-                {pageTabs.map(tab => (
-                  <TabsTrigger key={tab.value} value={tab.value} className="flex-1 data-[state=active]:border-blue-400">
-                    {tab.label}
-                  </TabsTrigger>
-                ))}
+                {pageTabs.map(tab => (<TabsTrigger key={tab.value} value={tab.value} className="flex-1 data-[state=active]:border-blue-400">{tab.label}</TabsTrigger>))}
               </TabsList>
               
-              <TabsContent value="overview" className="mt-6 prose prose-invert max-w-none text-blue-100">
-                <h2 className="text-white text-start">وصف الخدمة</h2>
-                <p className="whitespace-pre-line leading-relaxed text-start">{(currentService as any).fullDescriptionAr}</p>
+              {/* FIX: Removed `prose` class from the parent and applied specific styling to children */}
+              <TabsContent value="overview" className="mt-6 text-blue-100">
+                <div className="prose prose-invert max-w-none">
+                  <h2 className="text-white text-start">وصف الخدمة</h2>
+                  <p className="whitespace-pre-line leading-relaxed text-start">{(currentService as any).fullDescriptionAr}</p>
+                </div>
                 <ServiceFeatures />
               </TabsContent>
               <TabsContent value="faq" className="mt-6"><ServiceFAQ serviceId={currentService.slug} /></TabsContent>
