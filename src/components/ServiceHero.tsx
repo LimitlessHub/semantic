@@ -16,18 +16,12 @@ interface ServiceHeroProps {
 export default function ServiceHero({ service, city, country, language, averageRating, reviewCount, serviceImage }: ServiceHeroProps) {
   
   const TextContent = (
-    <div className={`flex flex-col h-full justify-center space-y-5 ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+    <div className={`flex flex-col h-full justify-center space-y-4 ${language === 'ar' ? 'text-right' : 'text-left'}`}>
       <ServiceBreadcrumb country={country} city={city} language={language} />
+      <h1 className="text-4xl md:text-5xl font-bold text-white">{language === 'ar' ? service.nameAr : service.name} في {language === 'ar' ? city.nameAr : city.name}</h1>
+      <p className="text-lg text-blue-200">{language === 'ar' ? service.descriptionAr : service.description}</p>
       
-      <h1 className="text-4xl md:text-5xl font-bold text-white">
-        {language === 'ar' ? service.nameAr : service.name} في {language === 'ar' ? city.nameAr : city.name}
-      </h1>
-
-      <p className="text-lg text-blue-200">
-        {language === 'ar' ? service.descriptionAr : service.description}
-      </p>
-      
-      {/* FIX: Rating alignment is now controlled by the parent's text-align */}
+      {/* FIX: Rating alignment is now forced correctly for RTL */}
       <div className={`flex items-center gap-x-3 ${language === 'ar' ? 'justify-end' : 'justify-start'}`}>
         <div className="flex items-center gap-x-1">
           {[...Array(5)].map((_, i) => ( <Star key={i} className={`w-5 h-5 ${i < Math.round(averageRating) ? 'text-yellow-400 fill-current' : 'text-gray-400'}`} /> ))}
@@ -35,33 +29,19 @@ export default function ServiceHero({ service, city, country, language, averageR
         <span className="text-white font-semibold">{averageRating.toFixed(1)} ({reviewCount} تقييم)</span>
       </div>
 
-      {/* FIX: Buttons are now part of the text content flow */}
-      <div className="pt-4">
-        <ServiceContactButtons city={city} />
-      </div>
+      <div className="pt-4"><ServiceContactButtons city={city} /></div>
     </div>
   );
 
   const ImageContent = (
     <div className="flex items-center justify-center">
-      <img src={serviceImage} alt={language === 'ar' ? service.nameAr : service.name} className="rounded-lg shadow-2xl w-full max-w-md object-cover aspect-video lg:aspect-square" onError={(e) => { e.currentTarget.src = '/images/services/default.jpg'; }} />
+      <img src={serviceImage} alt={language === 'ar' ? service.nameAr : service.name} className="rounded-lg shadow-2xl w-full max-w-md object-cover aspect-square" onError={(e) => { e.currentTarget.src = '/images/services/default.jpg'; }} />
     </div>
   );
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center py-8">
-      {/* FIX: Programmatically swapping columns to ensure Text is on the Right in Arabic */}
-      {language === 'ar' ? (
-        <>
-          {TextContent}
-          {ImageContent}
-        </>
-      ) : (
-        <>
-          {ImageContent}
-          {TextContent}
-        </>
-      )}
+      {language === 'ar' ? (<> {TextContent} {ImageContent} </>) : (<> {ImageContent} {TextContent} </>)}
     </section>
   );
 }
