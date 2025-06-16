@@ -1,4 +1,3 @@
-
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
@@ -9,10 +8,49 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getCountries, getServices, getCities } from '@/lib/cms';
 import { Country, Service, City } from '@/types';
+import SEOHead from '@/components/SEOHead';
+import { SEOData } from '@/lib/seo'; // Import SEOData type
+
+// Helper function to generate SEO for City Page
+const generateCityPageSEO = (city: City, country: Country, language: string): SEOData => {
+  const cityName = language === 'ar' ? city.nameAr : city.name;
+  const countryName = language === 'ar' ? country.nameAr : country.name;
+
+  return {
+    title: `${t('servicesIn', language)} ${cityName} | ${countryName}`,
+    description: `${t('reliableServicesDescription', language)} ${cityName}. ${t('browseAllServices', language)}.`,
+    keywords: [cityName, countryName, ...services.map(s => language === 'ar' ? s.nameAr : s.name)],
+    canonical: `/${country.slug}/${city.slug}`,
+    schemaMarkup: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": `${t('servicesIn', language)} ${cityName}`,
+      "description": `All available services in ${cityName}, ${countryName}.`,
+      "url": `/${country.slug}/${city.slug}`
+    }
+  };
+};
+
+// A helper for translation since t() is in the component scope
+const t = (key: string, lang: string) => {
+  const translations = {
+    ar: {
+      servicesIn: 'خدمات في',
+      reliableServicesDescription: 'خدمات موثوقة ومتاحة على مدار الساعة في',
+      browseAllServices: 'تصفح جميع خدماتنا',
+    },
+    en: {
+      servicesIn: 'Services in',
+      reliableServicesDescription: 'Reliable services available 24/7 in',
+      browseAllServices: 'Browse all our services',
+    }
+  };
+  return translations[lang as 'ar' | 'en'][key as keyof typeof translations['en']] || key;
+}
 
 const CityPage = () => {
-  const { country, city } = useParams();
-  const { language, t } = useLanguage();
+  const { country: countrySlug, city: citySlug } = useParams();
+  const { language, t: translate } = useLanguage();
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
   const [currentCity, setCurrentCity] = useState<City | null>(null);
   const [availableServices, setAvailableServices] = useState<Service[]>([]);
@@ -20,6 +58,7 @@ const CityPage = () => {
 
   useEffect(() => {
     async function loadData() {
+      setLoading(true);
       try {
         const [countriesData, servicesData, citiesData] = await Promise.all([
           getCountries(),
@@ -27,11 +66,15 @@ const CityPage = () => {
           getCities()
         ]);
 
-        const foundCountry = countriesData.find(c => c.slug === country);
-        const foundCity = citiesData.find(c => c.slug === city && c.countryId === foundCountry?.id);
-        const cityServices = servicesData.filter(s => 
-          s.availableCountries.includes(foundCountry?.code || '')
-        );
+        const foundCountry = countriesData.find(c => c.slug === countrySlug);
+        const foundCity = citiesData.find(c => c.slug === citySlug && c.countryId === foundCountry?.id);
+        
+        let cityServices: Service[] = [];
+        if (foundCountry) {
+          cityServices = servicesData.filter(s => 
+            s.availableCountries.includes(foundCountry.code) && s.isActive
+          );
+        }
 
         setCurrentCountry(foundCountry || null);
         setCurrentCity(foundCity || null);
@@ -43,14 +86,16 @@ const CityPage = () => {
       }
     }
 
-    loadData();
-  }, [country, city]);
+    if (countrySlug && citySlug) {
+      loadData();
+    }
+  }, [countrySlug, citySlug]);
 
   if (loading) {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center">
-          <div className="text-white text-xl">{t('loading')}</div>
+          <div className="text-white text-xl">{translate('loading')}</div>
         </div>
       </Layout>
     );
@@ -60,14 +105,17 @@ const CityPage = () => {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center">
-          <div className="text-white text-xl">{t('cityNotFound')}</div>
+          <div className="text-white text-xl">{translate('cityNotFound')}</div>
         </div>
       </Layout>
     );
   }
 
+  const seoData = generateCityPageSEO(currentCity, currentCountry, language);
+
   return (
     <Layout>
+      <SEOHead seoData={seoData} language={language} />
       <div className="min-h-screen">
         {/* Hero Section */}
         <section className="py-20 px-4">
@@ -80,10 +128,10 @@ const CityPage = () => {
             </div>
             
             <h1 className="text-5xl font-bold text-white mb-6">
-              {t('servicesIn')} {language === 'ar' ? currentCity.nameAr : currentCity.name}
+              {translate('servicesIn')} {language === 'ar' ? currentCity.nameAr : currentCity.name}
             </h1>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto mb-8">
-              {t('reliableServicesDescription')} {language === 'ar' ? currentCity.nameAr : currentCity.name}
+              {translate('reliableServicesDescription')} {language === 'ar' ? currentCity.nameAr : currentCity.name}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -93,7 +141,7 @@ const CityPage = () => {
               </div>
               <div className="flex items-center space-x-2 text-white bg-blue-600/50 px-6 py-3 rounded-lg">
                 <MessageCircle className="w-5 h-5" />
-                <span>{t('whatsapp')}: {currentCity.whatsappNumbers[0]}</span>
+                <span>{translate('whatsapp')}: {currentCity.whatsappNumbers[0]}</span>
               </div>
             </div>
           </div>
@@ -103,7 +151,7 @@ const CityPage = () => {
         <section className="py-16 bg-white/10 backdrop-blur-sm">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-white text-center mb-12">
-              {t('availableServices')}
+              {translate('availableServices')}
             </h2>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -112,6 +160,7 @@ const CityPage = () => {
                   <CardContent className="p-6">
                     <div className="flex items-center mb-4">
                       <span className="text-3xl mr-3">
+                        {/* Icons could be mapped from a component */}
                         {service.icon === 'wrench' && '🔧'}
                         {service.icon === 'zap' && '⚡'}
                         {service.icon === 'snowflake' && '❄️'}
@@ -129,18 +178,18 @@ const CityPage = () => {
                       </div>
                     </div>
                     
-                    <p className="text-blue-100 mb-4 text-sm">
+                    <p className="text-blue-100 mb-4 text-sm min-h-[60px]">
                       {language === 'ar' ? service.descriptionAr : service.description}
                     </p>
                     
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center justify-between mb-4 text-xs">
                       <div className="flex items-center text-yellow-300">
                         <Star className="w-4 h-4 mr-1 fill-current" />
-                        <span className="text-sm">{service.rating}</span>
+                        <span className="font-semibold">{service.rating}</span>
                       </div>
                       <div className="flex items-center text-green-300">
                         <Clock className="w-4 h-4 mr-1" />
-                        <span className="text-sm">
+                        <span>
                           {language === 'ar' ? service.estimatedDurationAr : service.estimatedDuration}
                         </span>
                       </div>
@@ -153,74 +202,19 @@ const CityPage = () => {
                       {service.isEmergency && (
                         <div className="flex items-center text-red-300">
                           <Shield className="w-4 h-4 mr-1" />
-                          <span className="text-xs">{t('emergency')}</span>
+                          <span className="text-xs font-bold">{translate('emergency')}</span>
                         </div>
                       )}
                     </div>
                     
-                    <Link to={`/${country}/${city}/${service.slug}`}>
+                    <Link to={`/${countrySlug}/${citySlug}/${service.slug}`}>
                       <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                        {t('bookNow')}
+                        {translate('bookNow')}
                       </Button>
                     </Link>
                   </CardContent>
                 </Card>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* City Info Section */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-2 gap-8">
-              <Card className="bg-white/10 backdrop-blur-sm border-white/20">
-                <CardContent className="p-6">
-                  <h3 className="text-2xl font-semibold text-white mb-4">
-                    {t('cityInfo')}
-                  </h3>
-                  <div className="space-y-3 text-blue-100">
-                    <div className="flex justify-between">
-                      <span>{t('region')}:</span>
-                      <span>{language === 'ar' ? currentCity.regionAr : currentCity.region}</span>
-                    </div>
-                    {currentCity.population && (
-                      <div className="flex justify-between">
-                        <span>{t('population')}:</span>
-                        <span>{currentCity.population.toLocaleString()}</span>
-                      </div>
-                    )}
-                    {currentCity.isCapital && (
-                      <div className="flex justify-between">
-                        <span>{t('status')}:</span>
-                        <span className="text-yellow-300">{t('capital')}</span>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-white/10 backdrop-blur-sm border-white/20">
-                <CardContent className="p-6">
-                  <h3 className="text-2xl font-semibold text-white mb-4">
-                    {t('contactInfo')}
-                  </h3>
-                  <div className="space-y-3">
-                    {currentCity.phoneNumbers.map((phone, index) => (
-                      <div key={index} className="flex items-center text-blue-100">
-                        <Phone className="w-4 h-4 mr-2" />
-                        <span>{phone}</span>
-                      </div>
-                    ))}
-                    {currentCity.whatsappNumbers.map((whatsapp, index) => (
-                      <div key={index} className="flex items-center text-blue-100">
-                        <MessageCircle className="w-4 h-4 mr-2" />
-                        <span>{whatsapp}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
             </div>
           </div>
         </section>
