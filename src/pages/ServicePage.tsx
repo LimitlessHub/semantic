@@ -80,12 +80,12 @@ const ServicePage = () => {
           <main className="lg:col-span-2">
             <Tabs defaultValue="overview" className="w-full">
               <TabsList className="flex w-full border-b border-white/10 rounded-none bg-transparent p-0">
-                {/* FIX: Improved colors for inactive and active tabs */}
+                {/* FIX: Set text color for active and inactive states correctly */}
                 {pageTabs.map(tab => (
                   <TabsTrigger 
                     key={tab.value} 
                     value={tab.value} 
-                    className="flex-1 text-blue-300 data-[state=active]:text-white data-[state=active]:border-white data-[state=active]:shadow-none border-b-2 border-transparent transition-colors duration-300"
+                    className="flex-1 text-blue-200/70 hover:text-white data-[state=active]:text-white data-[state=active]:bg-white/10 rounded-t-md border-b-2 border-transparent data-[state=active]:border-blue-400 transition-colors duration-300"
                   >
                     {tab.label}
                   </TabsTrigger>
