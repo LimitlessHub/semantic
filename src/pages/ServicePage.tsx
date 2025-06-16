@@ -45,7 +45,6 @@ const ServicePage = () => {
         setCurrentService(foundService || null);
         setCurrentCity(foundCity || null);
 
-        // Get related services (same category, different service)
         if (foundService) {
           const related = servicesData
             .filter(s => s.category === foundService.category && s.id !== foundService.id)
@@ -79,9 +78,9 @@ const ServicePage = () => {
       <Layout>
         <div className="min-h-screen flex items-center justify-center text-center px-4">
           <div>
-            <h1 className="text-3xl font-bold text-white mb-4">Service Not Available</h1>
-            <p className="text-blue-200">The requested service may not be available in this city, or the URL is incorrect.</p>
-            <p className="text-blue-200">Please check the URL or navigate from our homepage.</p>
+            <h1 className="text-3xl font-bold text-white mb-4">{t('service.notFound')}</h1>
+            <p className="text-blue-200">{t('service.notAvailable')}</p>
+            <p className="text-blue-200">{t('service.checkURL')}</p>
           </div>
         </div>
       </Layout>
@@ -91,7 +90,7 @@ const ServicePage = () => {
   const seoData = generateServicePageSEO(currentService, currentCity, currentCountry, language);
 
   const cityTestimonials = testimonials.filter(
-    t => t.serviceId === currentService.id && t.city === (language === 'ar' ? currentCity.nameAr : currentCity.name)
+    t => t.serviceId === currentService.id && (t.city === currentCity.name || t.city === currentCity.slug)
   );
 
   const averageRating = cityTestimonials.length > 0
@@ -107,70 +106,73 @@ const ServicePage = () => {
     <Layout>
       <SEOHead seoData={seoData} language={language} />
 
-      <section className="py-4 px-4">
-        <div className="container mx-auto">
-          {currentService.isEmergency && (
-            <UrgentServiceIndicator
-              onUrgentRequest={handleUrgentRequest}
-              serviceType={language === 'ar' ? currentService.nameAr : currentService.name}
-              isAvailable={true}
+      <div className="container mx-auto px-4 py-8">
+        {currentService.isEmergency && (
+          <UrgentServiceIndicator
+            onUrgentRequest={handleUrgentRequest}
+            serviceType={language === 'ar' ? currentService.nameAr : currentService.name}
+            isAvailable={true}
+          />
+        )}
+      </div>
+
+      {/* --- FIX: Restructured the main grid to be responsive --- */}
+      <main className="container mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
+          
+          {/* Main Content Column */}
+          <div className="lg:col-span-2 space-y-8">
+            <ServiceBreadcrumb
+              country={currentCountry}
+              city={currentCity}
+              language={language}
             />
-          )}
-        </div>
-      </section>
-
-      <section className="py-20 px-4">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-3 gap-12 items-start">
-            <div className="lg:col-span-2">
-              <ServiceBreadcrumb
-                country={currentCountry}
-                city={currentCity}
-                language={language}
-              />
-
-              <ServiceHero
-                service={currentService}
-                city={currentCity}
-                language={language}
-                averageRating={averageRating}
-                reviewCount={cityTestimonials.length}
-              />
-
-              <ServiceContactButtons city={currentCity} />
-
-              <ServiceFeatures />
-            </div>
-
-            <div className="mt-12 lg:mt-0">
-              <AvailabilityStatus
-                serviceId={currentService.id}
-                cityId={currentCity.slug}
-              />
-            </div>
+            <ServiceHero
+              service={currentService}
+              city={currentCity}
+              language={language}
+              averageRating={averageRating}
+              reviewCount={cityTestimonials.length}
+            />
+            <ServiceContactButtons city={currentCity} />
+            <ServiceFeatures />
           </div>
+
+          {/* Sidebar Column */}
+          <aside className="lg:sticky lg:top-24">
+            <AvailabilityStatus
+              serviceId={currentService.id}
+              cityId={currentCity.slug}
+            />
+          </aside>
         </div>
-      </section>
+      </main>
 
-      <ServiceFormSection
-        service={currentService}
-        city={currentCity}
-        country={currentCountry}
-        isUrgent={showUrgentForm}
-      />
+      <div className="mt-12">
+        <ServiceFormSection
+          service={currentService}
+          city={currentCity}
+          country={currentCountry}
+          isUrgent={showUrgentForm}
+        />
+      </div>
 
-      <Testimonials
-        testimonials={cityTestimonials}
-        serviceId={currentService.id}
-        cityId={currentCity.slug}
-      />
+      <div className="mt-12">
+        <Testimonials
+          testimonials={cityTestimonials}
+          serviceId={currentService.id}
+          cityId={currentCity.slug}
+        />
+      </div>
 
-      <RelatedServices
-        services={relatedServices}
-        city={currentCity}
-        country={countrySlug || ''}
-        language={language}
-      />
+      <div className="mt-12">
+        <RelatedServices
+          services={relatedServices}
+          city={currentCity}
+          country={countrySlug || ''}
+          language={language}
+        />
+      </div>
     </Layout>
   );
 };
