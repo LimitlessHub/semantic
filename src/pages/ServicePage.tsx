@@ -86,14 +86,16 @@ const ServicePage = () => {
                 {pageTabs.map(tab => (<TabsTrigger key={tab.value} value={tab.value} className="flex-1 data-[state=active]:border-blue-400">{tab.label}</TabsTrigger>))}
               </TabsList>
               
-              {/* FIX: Applying text-start to each tab's content to enforce RTL */}
-              <TabsContent value="overview" className="mt-6 text-start">
-                <h2 className="text-2xl font-bold text-white mb-4">وصف الخدمة</h2>
-                <p className="text-blue-100 whitespace-pre-line leading-relaxed">{(currentService as any).fullDescriptionAr}</p>
-                <ServiceFeatures />
-              </TabsContent>
-              <TabsContent value="faq" className="mt-6 text-start"><ServiceFAQ serviceId={currentService.slug} /></TabsContent>
-              <TabsContent value="coverage" className="mt-6 text-start"><ServiceCoverage cityId={currentCity.id} /></TabsContent>
+              {/* FIX: Applying explicit text alignment to each tab's content */}
+              <div className={`mt-6 ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+                <TabsContent value="overview">
+                    <h2 className="text-2xl font-bold text-white mb-4">وصف الخدمة</h2>
+                    <p className="text-blue-100 whitespace-pre-line leading-relaxed">{(currentService as any).fullDescriptionAr}</p>
+                    <ServiceFeatures />
+                </TabsContent>
+                <TabsContent value="faq"><ServiceFAQ /></TabsContent>
+                <TabsContent value="coverage"><ServiceCoverage cityId={currentCity.id} /></TabsContent>
+              </div>
             </Tabs>
           </main>
           <aside className="lg:sticky lg:top-24 space-y-8" id="service-form">
@@ -105,12 +107,12 @@ const ServicePage = () => {
       
       <div className="py-12 bg-blue-900/30"><Testimonials testimonials={cityTestimonials} /></div>
       
-      {/* FIX: Ensure this section renders */}
+      {/* FIX: Conditionally rendering the entire section to ensure it appears */}
       {relatedServices.length > 0 && (
-        <div className="py-12">
+        <section className="py-12">
           <h2 className="text-3xl font-bold text-white text-center mb-8">{t('service.related')}</h2>
           <RelatedServices services={relatedServices} city={currentCity} country={countrySlug || ''} language={language} />
-        </div>
+        </section>
       )}
     </Layout>
   );
