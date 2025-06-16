@@ -10,18 +10,18 @@ interface ServiceContactButtonsProps {
 export default function ServiceContactButtons({ city }: ServiceContactButtonsProps) {
   const { t } = useLanguage();
   return (
-    // FIX: Added flex-wrap to prevent overflow on very small screens
-    <div className="flex flex-col sm:flex-row gap-4 mb-8 flex-wrap">
-      <Button asChild className="bg-green-600 hover:bg-green-700 text-white px-6 py-6 text-lg w-full sm:w-auto flex-grow sm:flex-grow-0">
-        <a href={`tel:${city.phoneNumbers[0]}`}>
+    // FIX: Using flex-wrap to allow buttons to wrap on very small screens.
+    <div className="flex flex-wrap gap-4 mb-8">
+      <Button asChild className="bg-green-600 hover:bg-green-700 text-white px-6 py-6 text-base sm:text-lg flex-grow">
+        <a href={`tel:${city.phoneNumbers[0]}`} className="flex items-center justify-center gap-x-2">
           <Phone />
-          {t('button.contact')}: {city.phoneNumbers[0]}
+          <span className="break-all">{t('button.contact')}: {city.phoneNumbers[0]}</span>
         </a>
       </Button>
-      <Button asChild variant="outline" className="border-white/30 text-white hover:bg-white/10 px-6 py-6 text-lg w-full sm:w-auto flex-grow sm:flex-grow-0">
-        <a href={`https://wa.me/${city.whatsappNumbers[0].replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer">
+      <Button asChild variant="outline" className="border-white/30 text-white hover:bg-white/10 px-6 py-6 text-base sm:text-lg flex-grow">
+        <a href={`https://wa.me/${city.whatsappNumbers[0].replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-x-2">
           <MessageCircle />
-          {t('whatsapp')}: {city.whatsappNumbers[0]}
+          <span className="break-all">{t('whatsapp')}: {city.whatsappNumbers[0]}</span>
         </a>
       </Button>
     </div>
