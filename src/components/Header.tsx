@@ -27,13 +27,14 @@ export default function Header() {
             </Link>
           </div>
           
-          <nav className="hidden lg:flex items-center space-x-6">
+          {/* تم استبدال space-x-6 بـ gap-x-6 لتحسين المسافات في وضع RTL */}
+          <nav className="hidden lg:flex items-center gap-x-6">
             <Link to="/" className="text-blue-100 hover:text-white transition-colors">{t('nav.home')}</Link>
             
             <div className="relative group">
               <button className="text-blue-100 hover:text-white transition-colors flex items-center">
                 {t('nav.countries')}
-                <ChevronDown className="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" />
+                <ChevronDown className="w-4 h-4 ms-1 transition-transform group-hover:rotate-180" />
               </button>
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                 <div className="py-1">
@@ -51,18 +52,19 @@ export default function Header() {
             <Link to="/contact" className="text-blue-100 hover:text-white transition-colors">{t('nav.contact')}</Link>
           </nav>
           
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm" onClick={toggleLanguage} className="text-white hover:bg-white/10">
-              <Globe className="w-4 h-4 mr-2" />
-              {t('language.toggle')}
+          <div className="flex items-center gap-x-2 sm:gap-x-4">
+            <Button variant="ghost" size="sm" onClick={toggleLanguage} className="text-white hover:bg-white/10 px-2 sm:px-3">
+              <Globe className="w-5 h-5 sm:mr-2" />
+              <span className="hidden sm:inline">{t('language.toggle')}</span>
             </Button>
             
-            <div className="hidden sm:flex items-center space-x-2 text-white">
+            <a href="tel:+96612345678" className="hidden sm:flex items-center gap-x-2 text-white p-2 rounded-md hover:bg-white/10 transition-colors">
               <Phone className="w-4 h-4" />
               <span className="text-sm">{t('hero.support')}</span>
-            </div>
+            </a>
             
             <button className="lg:hidden text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              <span className="sr-only">Open menu</span>
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
@@ -70,18 +72,20 @@ export default function Header() {
 
         {isMobileMenuOpen && (
           <div className="lg:hidden mt-4 pb-4 border-t border-white/20">
-            <nav className="flex flex-col space-y-4 mt-4">
+            <nav className="flex flex-col gap-y-4 mt-4">
               <Link to="/" className="text-blue-100 hover:text-white" onClick={closeMenu}>{t('nav.home')}</Link>
               <Link to="/services" className="text-blue-100 hover:text-white" onClick={closeMenu}>{t('nav.services')}</Link>
               <Link to="/about" className="text-blue-100 hover:text-white" onClick={closeMenu}>{t('nav.about')}</Link>
               <Link to="/contact" className="text-blue-100 hover:text-white" onClick={closeMenu}>{t('nav.contact')}</Link>
               <div className="border-t border-white/10 pt-4">
                 <h3 className="text-white font-semibold mb-2">{t('nav.countries')}</h3>
-                {countries.map((country) => (
-                   <Link key={country.path} to={country.path} className="block text-blue-200 hover:text-white py-1" onClick={closeMenu}>
-                     {country.name}
-                   </Link>
-                ))}
+                <div className="flex flex-col gap-y-2">
+                    {countries.map((country) => (
+                       <Link key={country.path} to={country.path} className="block text-blue-200 hover:text-white py-1" onClick={closeMenu}>
+                         {country.name}
+                       </Link>
+                    ))}
+                </div>
               </div>
             </nav>
           </div>
