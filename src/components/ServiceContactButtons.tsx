@@ -10,15 +10,19 @@ interface ServiceContactButtonsProps {
 export default function ServiceContactButtons({ city }: ServiceContactButtonsProps) {
   const { t } = useLanguage();
   return (
-    <div className="flex flex-col sm:flex-row gap-4 mb-8">
-      {/* FIX: Removed mr-2 from icon, letting the Button's default gap handle spacing */}
-      <Button className="bg-green-600 hover:bg-green-700 text-white px-6 py-6 text-lg w-full sm:w-auto">
-        <Phone className="w-5 h-5" />
-        {t('button.contact')}: {city.phoneNumbers[0]}
+    // FIX: Added flex-wrap to prevent overflow on very small screens
+    <div className="flex flex-col sm:flex-row gap-4 mb-8 flex-wrap">
+      <Button asChild className="bg-green-600 hover:bg-green-700 text-white px-6 py-6 text-lg w-full sm:w-auto flex-grow sm:flex-grow-0">
+        <a href={`tel:${city.phoneNumbers[0]}`}>
+          <Phone />
+          {t('button.contact')}: {city.phoneNumbers[0]}
+        </a>
       </Button>
-      <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 px-6 py-6 text-lg w-full sm:w-auto">
-        <MessageCircle className="w-5 h-5" />
-        {t('whatsapp')}: {city.whatsappNumbers[0]}
+      <Button asChild variant="outline" className="border-white/30 text-white hover:bg-white/10 px-6 py-6 text-lg w-full sm:w-auto flex-grow sm:flex-grow-0">
+        <a href={`https://wa.me/${city.whatsappNumbers[0].replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer">
+          <MessageCircle />
+          {t('whatsapp')}: {city.whatsappNumbers[0]}
+        </a>
       </Button>
     </div>
   );
