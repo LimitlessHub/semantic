@@ -49,7 +49,7 @@ const ServicePage = () => {
     }
     if (countrySlug && citySlug && serviceSlug) { loadData(); }
   }, [countrySlug, citySlug, serviceSlug]);
-
+  
   const handleUrgentRequest = () => {
     setShowUrgentForm(true);
     document.getElementById('service-form')?.scrollIntoView({ behavior: 'smooth' });
@@ -64,12 +64,22 @@ const ServicePage = () => {
   const averageRating = cityTestimonials.length > 0 ? cityTestimonials.reduce((sum, t) => sum + t.rating, 0) / cityTestimonials.length : 4.8;
   const serviceImage = `/images/services/${currentService.slug}.jpg`;
 
+  // --- FIX: Programmatically define and order tabs for perfect RTL control ---
+  const pageTabs = [
+    { value: "overview", label: "نظرة عامة" },
+    { value: "faq", label: "الأسئلة الشائعة" },
+    { value: "coverage", label: "مناطق التغطية" },
+  ];
+  // Reverse the array for RTL languages
+  if (language === 'ar') {
+    pageTabs.reverse();
+  }
+
   return (
     <Layout>
       <SEOHead seoData={seoData} language={language} />
       
-      <div className="container mx-auto px-4 py-8">
-        
+      <div className="container mx-auto px-4 pt-8">
         {/* FIX 1: UrgentServiceIndicator is back and will show when needed. */}
         {currentService.isEmergency && (
           <div className="mb-8">
@@ -80,33 +90,32 @@ const ServicePage = () => {
             />
           </div>
         )}
+        
+        <ServiceHero service={currentService} city={currentCity} country={currentCountry} language={language} averageRating={averageRating} reviewCount={cityTestimonials.length} serviceImage={serviceImage}/>
+      </div>
 
-        {/* The main two-column layout for desktop, which stacks on mobile */}
+      <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
-          
-          {/* Main content area (takes 2 columns on large screens) */}
-          <main className="lg:col-span-2 space-y-8">
-            <ServiceHero service={currentService} city={currentCity} country={currentCountry} language={language} averageRating={averageRating} reviewCount={cityTestimonials.length} serviceImage={serviceImage}/>
-            
+          <main className="lg:col-span-2">
             <Tabs defaultValue="overview" className="w-full">
-              {/* FIX 2: Tabs are now flex and RTL-aware, with better styling */}
-              <TabsList className="flex w-full border-b border-white/20 rounded-none bg-transparent p-0 rtl:flex-row-reverse">
-                <TabsTrigger value="overview">نظرة عامة</TabsTrigger>
-                <TabsTrigger value="faq">الأسئلة الشائعة</TabsTrigger>
-                <TabsTrigger value="coverage">مناطق التغطية</TabsTrigger>
+              <TabsList className="flex w-full border-b border-white/20 rounded-none bg-transparent p-0">
+                {/* Render tabs from the ordered array */}
+                {pageTabs.map(tab => (
+                  <TabsTrigger key={tab.value} value={tab.value} className="flex-1 data-[state=active]:border-blue-400">
+                    {tab.label}
+                  </TabsTrigger>
+                ))}
               </TabsList>
               
               <TabsContent value="overview" className="mt-6 prose prose-invert max-w-none text-blue-100">
-                <h2 className="text-white">وصف الخدمة</h2>
-                <p className="whitespace-pre-line leading-relaxed">{language === 'ar' ? (currentService as any).fullDescriptionAr : (currentService as any).fullDescription}</p>
+                <h2 className="text-white text-start">وصف الخدمة</h2>
+                <p className="whitespace-pre-line leading-relaxed text-start">{(currentService as any).fullDescriptionAr}</p>
                 <ServiceFeatures />
               </TabsContent>
               <TabsContent value="faq" className="mt-6"><ServiceFAQ serviceId={currentService.slug} /></TabsContent>
               <TabsContent value="coverage" className="mt-6"><ServiceCoverage cityId={currentCity.id} /></TabsContent>
             </Tabs>
           </main>
-
-          {/* Sidebar area (takes 1 column on large screens, stacks below on mobile) */}
           <aside className="lg:sticky lg:top-24 space-y-8" id="service-form">
             <AvailabilityStatus serviceId={currentService.id} cityId={currentCity.slug} />
             <ServiceFormSection service={currentService} city={currentCity} country={currentCountry} isUrgent={showUrgentForm} />
