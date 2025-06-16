@@ -18,8 +18,8 @@ import { testimonials } from '@/lib/testimonials';
 import { Country, Service, City } from '@/types';
 
 const ServicePage = () => {
-  const { country, city, service } = useParams();
-  const { language } = useLanguage();
+  const { country: countrySlug, city: citySlug, service: serviceSlug } = useParams();
+  const { language, t } = useLanguage();
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
   const [currentService, setCurrentService] = useState<Service | null>(null);
   const [currentCity, setCurrentCity] = useState<City | null>(null);
@@ -29,6 +29,7 @@ const ServicePage = () => {
 
   useEffect(() => {
     async function loadData() {
+      setLoading(true);
       try {
         const [countriesData, servicesData, citiesData] = await Promise.all([
           getCountries(),
@@ -36,9 +37,9 @@ const ServicePage = () => {
           getCities()
         ]);
 
-        const foundCountry = countriesData.find(c => c.slug === country);
-        const foundService = servicesData.find(s => s.slug === service);
-        const foundCity = citiesData.find(c => c.slug === city && c.countryId === foundCountry?.id);
+        const foundCountry = countriesData.find(c => c.slug === countrySlug);
+        const foundService = servicesData.find(s => s.slug === serviceSlug);
+        const foundCity = citiesData.find(c => c.slug === citySlug && c.countryId === foundCountry?.id);
 
         setCurrentCountry(foundCountry || null);
         setCurrentService(foundService || null);
@@ -58,14 +59,16 @@ const ServicePage = () => {
       }
     }
 
-    loadData();
-  }, [country, city, service]);
+    if (countrySlug && citySlug && serviceSlug) {
+      loadData();
+    }
+  }, [countrySlug, citySlug, serviceSlug]);
 
   if (loading) {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center">
-          <div className="text-white text-xl">Loading...</div>
+          <div className="text-white text-xl">{t('loading')}</div>
         </div>
       </Layout>
     );
@@ -74,8 +77,12 @@ const ServicePage = () => {
   if (!currentCountry || !currentService || !currentCity) {
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-white text-xl">Service not found</div>
+        <div className="min-h-screen flex items-center justify-center text-center px-4">
+          <div>
+            <h1 className="text-3xl font-bold text-white mb-4">Service Not Available</h1>
+            <p className="text-blue-200">The requested service may not be available in this city, or the URL is incorrect.</p>
+            <p className="text-blue-200">Please check the URL or navigate from our homepage.</p>
+          </div>
         </div>
       </Layout>
     );
@@ -87,8 +94,8 @@ const ServicePage = () => {
     t => t.serviceId === currentService.id && t.city === (language === 'ar' ? currentCity.nameAr : currentCity.name)
   );
 
-  const averageRating = cityTestimonials.length > 0 
-    ? cityTestimonials.reduce((sum, t) => sum + t.rating, 0) / cityTestimonials.length 
+  const averageRating = cityTestimonials.length > 0
+    ? cityTestimonials.reduce((sum, t) => sum + t.rating, 0) / cityTestimonials.length
     : 4.8;
 
   const handleUrgentRequest = () => {
@@ -99,30 +106,30 @@ const ServicePage = () => {
   return (
     <Layout>
       <SEOHead seoData={seoData} language={language} />
-      
-      {/* Urgent Service Indicator */}
+
       <section className="py-4 px-4">
         <div className="container mx-auto">
-          <UrgentServiceIndicator 
-            onUrgentRequest={handleUrgentRequest}
-            serviceType={currentService.name}
-            isAvailable={true}
-          />
+          {currentService.isEmergency && (
+            <UrgentServiceIndicator
+              onUrgentRequest={handleUrgentRequest}
+              serviceType={language === 'ar' ? currentService.nameAr : currentService.name}
+              isAvailable={true}
+            />
+          )}
         </div>
       </section>
 
-      {/* Hero Section */}
       <section className="py-20 px-4">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-3 gap-12">
+          <div className="grid lg:grid-cols-3 gap-12 items-start">
             <div className="lg:col-span-2">
-              <ServiceBreadcrumb 
+              <ServiceBreadcrumb
                 country={currentCountry}
                 city={currentCity}
                 language={language}
               />
-              
-              <ServiceHero 
+
+              <ServiceHero
                 service={currentService}
                 city={currentCity}
                 language={language}
@@ -135,68 +142,34 @@ const ServicePage = () => {
               <ServiceFeatures />
             </div>
 
-            {/* Availability Status */}
-            <div>
-              <AvailabilityStatus 
-                serviceId={currentService.id} 
-                cityId={currentCity.slug} 
+            <div className="mt-12 lg:mt-0">
+              <AvailabilityStatus
+                serviceId={currentService.id}
+                cityId={currentCity.slug}
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Service Request Form */}
-      <ServiceFormSection 
+      <ServiceFormSection
         service={currentService}
         city={currentCity}
         country={currentCountry}
         isUrgent={showUrgentForm}
       />
 
-      {/* Testimonials for this specific service and city */}
-      <Testimonials 
-        testimonials={cityTestimonials} 
+      <Testimonials
+        testimonials={cityTestimonials}
         serviceId={currentService.id}
         cityId={currentCity.slug}
       />
 
-      {/* Related Services */}
-      <RelatedServices 
+      <RelatedServices
         services={relatedServices}
         city={currentCity}
-        country={country || ''}
+        country={countrySlug || ''}
         language={language}
-      />
-
-      {/* Schema.org JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "LocalBusiness",
-            "name": `${currentService.name} في ${currentCity.name}`,
-            "description": currentService.description,
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": currentCity.name,
-              "addressCountry": currentCountry.name
-            },
-            "telephone": currentCity.phoneNumbers[0],
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": averageRating.toFixed(1),
-              "reviewCount": cityTestimonials.length,
-              "bestRating": "5",
-              "worstRating": "1"
-            },
-            "areaServed": {
-              "@type": "City",
-              "name": currentCity.name
-            }
-          })
-        }}
       />
     </Layout>
   );
